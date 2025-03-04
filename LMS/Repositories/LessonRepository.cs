@@ -35,24 +35,25 @@ namespace LMS.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Lesson>> GetLessonByCourseId(int courseId)
+        public async Task<List<Lesson>> GetLessonByCourseId(int courseId)
         {
-            throw new NotImplementedException();
+            return await _context.Lessons.Include(l => l.Chapter).Where(l => l.Chapter.CourseID == courseId).ToListAsync(); 
         }
 
-        public Task<Lesson> GetLessonByID(int id)
+        public async Task<Lesson> GetLessonByID(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Lessons.FirstOrDefaultAsync(l => l.Id == id); 
         }
 
-        public Task<List<Lesson>> GetLessonsByChaperId(int chaperId)
+        public async Task<List<Lesson>> GetLessonsByChaperId(int chaperId)
         {
-            throw new NotImplementedException();
+            return await _context.Lessons.Where(l => l.ChapterID == chaperId).ToListAsync(); 
         }
 
-        public Task UpdateLesson(Lesson lesson)
+        public async Task UpdateLesson(Lesson lesson)
         {
-            throw new NotImplementedException();
+            _context.Lessons.Update(lesson);
+            await _context.SaveChangesAsync(); 
         }
     }
 }
