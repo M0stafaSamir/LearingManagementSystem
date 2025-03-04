@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using LMS.Models.StudentModels;
 
 namespace LMS.Models.InstractourModel
 {
@@ -22,7 +23,8 @@ namespace LMS.Models.InstractourModel
         [ForeignKey("Chapter")]
         public int ChapterID { get; set; }
         public Chapter Chapter { get; set; }
+        public List<Note> Notes { get; set; }
 
-        
+
     }
 }

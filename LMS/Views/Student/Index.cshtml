@@ -1,0 +1,96 @@
+﻿@model LMS.ViewModel.StudentHomeViewModel
+
+<h2>Recommended Courses</h2>
+<div>
+    @foreach (var course in Model.RecommendedCourses)
+    {
+        <div class="course-card">
+            <img src="@course.Image" alt="@course.Name" />
+            <h3><a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@course.Id">@course.Name</a></h3>
+            <p>@course.Description</p>
+            <p>Price: @(course.Price == 0 ? "Free" : "$" + course.Price)</p>
+            <p>Instructor: @course.Instructor.Name</p>
+
+            @if (course.Price == 0)
+            {
+                <form method="post" asp-action="EnrollCourse" asp-controller="Student">
+                    <input type="hidden" name="courseId" value="@course.Id" />
+                    <button type="submit">Enroll Now</button>
+                </form>
+            }
+            else
+            {
+                <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
+                    <input type="hidden" name="courseId" value="@course.Id" />
+                    <button type="submit">Purchase</button>
+                </form>
+            }
+
+            <form method="post" asp-action="AddToWishlist" asp-controller="Student">
+                <input type="hidden" name="courseId" value="@course.Id" />
+                <button type="submit">Add to Wishlist</button>
+            </form>
+        </div>
+    }
+</div>
+
+<h2>All Courses</h2>
+<input type="text" id="searchBox" placeholder="Search courses..." />
+<select id="categoryDropdown">
+    <option value="">All Categories</option>
+    @foreach (var category in ViewBag.Categories)
+    {
+        <option value="@category">@category</option>
+    }
+</select>
+<button onclick="searchCourses()">Search</button>
+
+<div>
+    @foreach (var course in Model.Courses)
+    {
+        bool isPurchased = Model.PurchasedCourses?.Any(c => c.Id == course.Id) ?? false;
+        <div class="course-card">
+            <img src="@course.Image" alt="@course.Name" />
+            <h3><a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@course.Id">@course.Name</a></h3>
+            <p>@course.Description</p>
+            <p>Price: @(course.Price == 0 ? "Free" : "$" + course.Price)</p>
+            <p>Instructor: @course.Instructor.Name</p>
+
+            @if (isPurchased)
+            {
+                double progress = Model.CourseProgress?.ContainsKey(course.Id) == true ? Model.CourseProgress[course.Id] : 0;
+                <p>Progress: @progress%</p>
+            }
+            else
+            {
+                @if (course.Price == 0)
+                {
+                    <form method="post" asp-action="EnrollCourse" asp-controller="Student">
+                        <input type="hidden" name="courseId" value="@course.Id" />
+                        <button type="submit">Enroll Now</button>
+                    </form>
+                }
+                else
+                {
+                    <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
+                        <input type="hidden" name="courseId" value="@course.Id" />
+                        <button type="submit">Purchase</button>
+                    </form>
+                }
+
+                <form method="post" asp-action="AddToWishlist" asp-controller="Student">
+                    <input type="hidden" name="courseId" value="@course.Id" />
+                    <button type="submit">Add to Wishlist</button>
+                </form>
+            }
+        </div>
+    }
+</div>
+
+<script>
+    function searchCourses() {
+        var search = document.getElementById("searchBox").value;
+        var category = document.getElementById("categoryDropdown").value;
+        window.location.href = "@Url.Action("Index")" + "?search=" + encodeURIComponent(search) + "&category=" + encodeURIComponent(category);
+    }
+</script>

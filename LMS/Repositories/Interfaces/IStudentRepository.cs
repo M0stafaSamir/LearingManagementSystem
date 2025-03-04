@@ -1,14 +1,17 @@
 ﻿using LMS.Models;
 using LMS.Models.InstractourModel;
 using LMS.Models.StudentModels;
+using Microsoft.EntityFrameworkCore;
 
 public interface IStudentRepository
 {
     // Course-related actions
-    IEnumerable<Course> GetAllCourses();
+    IEnumerable<Course> GetAllCourses(string search = "", Category category = null);
+    Course GetCourseDetails(int courseId);
     IEnumerable<Course> SearchCoursesByName(string name);
     IEnumerable<Course> SearchCoursesByCategory(Category category);
     IEnumerable<Course> GetRecommendedCourses(string studentId);
+    IEnumerable<Category> GetAllCategories();
 
     // Certificate actions
     CertificateForStudent GetCertificateForCourse(string studentId, int courseId);
@@ -23,7 +26,7 @@ public interface IStudentRepository
 
     // Purchase management
     void PurchaseCourse(string studentId, int courseId);
-    IEnumerable<Purchase> GetAllPurchases(string studentId);
+    IEnumerable<Course> GetAllPurchases(string studentId);
 
     // Review & Rating management
     void AddReview(string studentId, int courseId, string reviewText, int rating);
@@ -35,10 +38,13 @@ public interface IStudentRepository
     IEnumerable<Course> GetEnrolledCourses(string studentId);
     void EnrollInCourse(string studentId, int courseId);
     void RemoveEnrollment(string studentId, int courseId);
+    bool HasPurchasedCourse(int courseId, string studentId);
 
     // Lesson progress tracking
     IEnumerable<Lesson> GetAllLessonsInCourse(int courseId);
     void MarkLessonAsStudied(string studentId, int lessonId);
+    public Lesson GetLessonDetails(int lessonId, string studentId);
+
     double GetCourseProgress(string studentId, int courseId);
 
     // Wishlist management

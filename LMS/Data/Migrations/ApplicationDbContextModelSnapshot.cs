@@ -107,7 +107,7 @@ namespace LMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("LMS.Models.InstractourModel.Chapter", b =>
@@ -176,7 +176,7 @@ namespace LMS.Data.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Course");
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("LMS.Models.InstractourModel.Lesson", b =>
@@ -214,7 +214,90 @@ namespace LMS.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lesson");
+                    b.ToTable("Lessons");
+                });
+
+            modelBuilder.Entity("LMS.Models.InstractourModel.RequestingCourse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("InstructorID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RequestedCourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstructorID");
+
+                    b.HasIndex("RequestedCourseId");
+
+                    b.ToTable("RequestingCourses");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.CertificateForStudent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AcquireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Grade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Certificates");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("LMS.Models.StudentModels.Purchase", b =>
@@ -243,7 +326,40 @@ namespace LMS.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Purchase");
+                    b.ToTable("Purchases");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.ReviewedCourse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("ReviewedCourses");
                 });
 
             modelBuilder.Entity("LMS.Models.StudentModels.StudentEnrollCourse", b =>
@@ -269,7 +385,53 @@ namespace LMS.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentEnrollCourse");
+                    b.ToTable("studentEnrollCourses");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.StudentStudiedLesson", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentStudiedLessons");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.WishList", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("WishedCourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("WishedCourseId");
+
+                    b.ToTable("WishList");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -452,6 +614,57 @@ namespace LMS.Data.Migrations
                     b.Navigation("Chapter");
                 });
 
+            modelBuilder.Entity("LMS.Models.InstractourModel.RequestingCourse", b =>
+                {
+                    b.HasOne("LMS.Models.AppUser", "Instructor")
+                        .WithMany()
+                        .HasForeignKey("InstructorID");
+
+                    b.HasOne("LMS.Models.InstractourModel.Course", "RequestedCourse")
+                        .WithMany()
+                        .HasForeignKey("RequestedCourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
+
+                    b.Navigation("RequestedCourse");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.CertificateForStudent", b =>
+                {
+                    b.HasOne("LMS.Models.InstractourModel.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LMS.Models.AppUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.Note", b =>
+                {
+                    b.HasOne("LMS.Models.InstractourModel.Lesson", "Lesson")
+                        .WithMany("Notes")
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LMS.Models.AppUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Lesson");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("LMS.Models.StudentModels.Purchase", b =>
                 {
                     b.HasOne("LMS.Models.InstractourModel.Course", "Course")
@@ -462,6 +675,23 @@ namespace LMS.Data.Migrations
 
                     b.HasOne("LMS.Models.AppUser", "Student")
                         .WithMany("Purchases")
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.ReviewedCourse", b =>
+                {
+                    b.HasOne("LMS.Models.InstractourModel.Course", "Course")
+                        .WithMany("Reviews")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LMS.Models.AppUser", "Student")
+                        .WithMany()
                         .HasForeignKey("StudentId");
 
                     b.Navigation("Course");
@@ -484,6 +714,40 @@ namespace LMS.Data.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.StudentStudiedLesson", b =>
+                {
+                    b.HasOne("LMS.Models.InstractourModel.Lesson", "Lesson")
+                        .WithMany()
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LMS.Models.AppUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Lesson");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("LMS.Models.StudentModels.WishList", b =>
+                {
+                    b.HasOne("LMS.Models.AppUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.HasOne("LMS.Models.InstractourModel.Course", "WishedCourse")
+                        .WithMany()
+                        .HasForeignKey("WishedCourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("WishedCourse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -557,7 +821,14 @@ namespace LMS.Data.Migrations
 
                     b.Navigation("Purchases");
 
+                    b.Navigation("Reviews");
+
                     b.Navigation("StudentEnrollments");
+                });
+
+            modelBuilder.Entity("LMS.Models.InstractourModel.Lesson", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

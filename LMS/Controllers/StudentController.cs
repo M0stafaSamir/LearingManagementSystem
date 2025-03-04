@@ -1,52 +1,101 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using LMS.Models;
+using LMS.Models.InstractourModel;
 using Microsoft.AspNetCore.Mvc;
-using LMS.Models.StudentModels;
+using LMS.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
-namespace LMS.Controllers
+[Authorize]
+public class StudentController : Controller
 {
-    public class StudentController : Controller
-    {
-        private readonly IStudentRepository _studentRepo;
+    private readonly IStudentRepository _studentRepo;
 
-        public StudentController(IStudentRepository studentRepo)
+    public StudentController(IStudentRepository studentRepo)
+    {
+        _studentRepo = studentRepo;
+    }
+
+
+    public IActionResult Index(string search, Category category)
+    {
+        var studentId = User.Identity.Name;
+
+        var courses = _studentRepo.GetAllCourses(search, category);
+        var purchasedCourses = _studentRepo.GetAllPurchases(studentId);
+
+        var courseProgress = new Dictionary<int, double>(); 
+        foreach (var course in purchasedCourses)
         {
-            _studentRepo = studentRepo;
+            courseProgress[course.Id] = _studentRepo.GetCourseProgress(studentId, course.Id);
         }
 
-        //Get All Courses
-        //Search for course by name
-        //Search for course by category
+        var model = new StudentHomeViewModel
+        {
+            Courses = courses,
+            RecommendedCourses = _studentRepo.GetRecommendedCourses(studentId),
+            PurchasedCourses = purchasedCourses,
+            CourseProgress = courseProgress
+        };
 
-        //Get Certificate for a course when finish all course lessons
-        //Get All his Certificates
+        ViewBag.Categories = _studentRepo.GetAllCategories();
 
-        //add note to a lesson in a course 
-        //get all notes  
-        //update note
-        //delete note
+        return View(model);
+    }
+    [HttpPost]
+    public IActionResult EnrollCourse(int courseId)
+    {
+        var studentId = User.Identity.Name; 
+        _studentRepo.EnrollInCourse(studentId,courseId);
+        return RedirectToAction("Index");
+    }
 
-        //purchase for a course
-        //get all his purchases
+    [HttpPost]
+    public IActionResult PurchaseCourse(int courseId)
+    {
+        var course = _studentRepo.GetCourseDetails(courseId);
+        if (course == null) return NotFound();
 
-        //add review&rating to course
-        //update 
-        //delete
-        //get all
+        return View(course);
+    }
 
-        //Get Enrolled Courses
-        //add
-        //update
-        //delete
+    [HttpPost]
+    public IActionResult AddToWishlist(int courseId)
+    {
+        var studentId = User.Identity.Name;
+        _studentRepo.AddToWishlist(studentId,courseId );
+        TempData["Message"] = "Course added to wishlist!";
+        return RedirectToAction("Index");
+    }
 
-        //get all lessons in course 
-        //add to StudentStudiedLesson once click on the lesson
-        
-        //add to wishlist
-        //get all wishlist
-        //delete from wishlist
-
-
+    public IActionResult CourseDetails(int courseId)
+    {
+        var course = _studentRepo.GetCourseDetails(courseId);
+        if (course == null) return NotFound();
+        return View(course);
+    }
+    public IActionResult LessonDetails(int lessonId)
+    {
+        var lesson = _studentRepo.GetLessonDetails(lessonId, User.Identity.Name);
+        if (lesson == null) return NotFound();
+        if (!_studentRepo.HasPurchasedCourse(lesson.Chapter.CourseID, User.Identity.Name))
+        {
+            return RedirectToAction("CourseDetails", new { courseId = lesson.Chapter.CourseID });
+        }
+        _studentRepo.MarkLessonAsStudied(User.Identity.Name, lessonId);
+        return View(lesson);
+    }
+    public IActionResult EnrolledCourses()
+    {
+        var enrolledCourses = _studentRepo.GetEnrolledCourses(User.Identity.Name);
+        return View(enrolledCourses);
+    }
+    public IActionResult Wishlist()
+    {
+        var wishlist = _studentRepo.GetWishlist(User.Identity.Name);
+        return View(wishlist);
+    }
+    public IActionResult Certificates()
+    {
+        var certificates = _studentRepo.GetAllCertificates(User.Identity.Name);
+        return View(certificates);
     }
 }

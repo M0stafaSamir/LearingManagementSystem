@@ -41,5 +41,6 @@ namespace LMS.Models.InstractourModel
         public ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
         public ICollection<StudentEnrollCourse> StudentEnrollments { get; set; } = new List<StudentEnrollCourse>();
         public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+        public ICollection<ReviewedCourse> Reviews { get; set; } = new List<ReviewedCourse>();
     }
 }

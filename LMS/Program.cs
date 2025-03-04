@@ -26,6 +26,7 @@ namespace LMS
             builder.Services.AddRazorPages();
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
             builder.Services.AddAuthentication().AddFacebook(opt =>
             {
