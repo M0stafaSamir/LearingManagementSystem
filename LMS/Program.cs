@@ -32,6 +32,8 @@ namespace LMS
 
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
             builder.Services.AddScoped<ICourseRepository,CourseRepository>();
+            
+            builder.Services.AddScoped<IAdminRepository,AdminRepository>();
 
 
             builder.Services.AddAuthentication().AddFacebook(opt =>

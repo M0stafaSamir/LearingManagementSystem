@@ -34,10 +34,7 @@ namespace LMS.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            string id = GetLoggedInUserId();
-
-
-
+            string id = GetLoggedInUserId();//id
             return View(await _categoryRepo.GetAllCategories());
         }
 

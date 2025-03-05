@@ -24,6 +24,9 @@ namespace LMS.Data
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<StudentEnrollCourse> studentEnrollCourses { get; set; }
-    
+
+
+        public DbSet<AppUser> AppUsers { get; set; } 
+
     }
 }
