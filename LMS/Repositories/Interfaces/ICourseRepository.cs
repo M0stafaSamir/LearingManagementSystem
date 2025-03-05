@@ -11,6 +11,7 @@ namespace LMS.Repositories.Interfaces
         Task<Course> GetCourseById(int id);
         Task AddCourse(Course course);
         Task UpdateCourse(Course course);
+        Task AcceptCourse(int id);
         Task DeleteCourse(int id);
         Task<IEnumerable<Course>> GetCoursesByCategoryId(int categoryId);
         Task<IEnumerable<Course>> GetCoursesByInstructorId(int instructorId);

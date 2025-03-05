@@ -77,5 +77,17 @@ namespace LMS.Repositories
             _context.Courses.Update(course);
             await _context.SaveChangesAsync(); 
         }
+
+
+        public async Task AcceptCourse(int id)
+        {
+           var accCourse= await _context.Courses.FirstOrDefaultAsync(c => c.Id == id);
+            if (accCourse != null) 
+            {
+            accCourse.IsAccepted = true;
+            await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }
