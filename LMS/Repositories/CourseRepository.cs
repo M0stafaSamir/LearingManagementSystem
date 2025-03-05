@@ -28,11 +28,17 @@ namespace LMS.Repositories
             }
         }
 
-        public async Task<List<Course>> GetAllCourses()
+        public async Task<IEnumerable<Course>> GetAllCourses()
         {
             return await _context.Courses.Where(c=>c.IsAccepted==true).ToListAsync();
         }
-        public async Task<List<Course>> GetAllRequestedCourses()
+        public async Task<IEnumerable<Course>> GetInstructorCourses(string Id)
+        {
+            return await _context.Courses
+                .Where(c => c.IsAccepted == true)
+                .Where(c=>c.InstructorId==Id).ToListAsync();
+        }
+        public async Task<IEnumerable<Course>> GetAllRequestedCourses()
         {
             return await _context.Courses.Where(c => c.IsAccepted == false).ToListAsync();
         }
@@ -46,21 +52,21 @@ namespace LMS.Repositories
             return _context.Courses.Count();
         }
 
-        public async Task<List<Course>> GetCoursesByCategoryId(int categoryId)
+        public async Task<IEnumerable<Course>> GetCoursesByCategoryId(int categoryId)
         {
             return await _context.Courses.Where(c => c.CategoryId == categoryId).ToListAsync(); 
         }
 
-        public async Task<List<Course>> GetCoursesByInstructorId(int instructorId)
+        public async Task<IEnumerable<Course>> GetCoursesByInstructorId(int instructorId)
         {
             return await _context.Courses.Where(c=>c.IsAccepted==true).ToListAsync();
         }
-        public async Task<List<Course>> GetRequestedCoursesByInstructorId(int instructorId)
+        public async Task<IEnumerable<Course>> GetRequestedCoursesByInstructorId(int instructorId)
         {
             return await _context.Courses.Where(c => c.IsAccepted == false).ToListAsync();
         }
 
-        public async Task<List<Course>> SearchCourseByName(string name)
+        public async Task<IEnumerable<Course>> SearchCourseByName(string name)
         {
             return await _context.Courses.Where(c=>c.Name==name).ToListAsync();
         }
