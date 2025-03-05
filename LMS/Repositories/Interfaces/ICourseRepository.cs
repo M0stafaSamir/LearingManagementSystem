@@ -5,11 +5,7 @@ namespace LMS.Repositories.Interfaces
     public interface ICourseRepository
     {
         Task<IEnumerable<Course>> GetAllCourses();
-<<<<<<< Updated upstream
         Task<IEnumerable<Course>> GetInstructorCourses(string Id);
-
-=======
->>>>>>> Stashed changes
         Task<IEnumerable<Course>> GetAllRequestedCourses();
         Task<IEnumerable<Course>> SearchCourseByName(string name);
         Task<Course> GetCourseById(int id);
