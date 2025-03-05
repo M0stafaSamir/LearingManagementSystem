@@ -32,15 +32,13 @@ namespace LMS.Repositories
         {
             return await _context.Courses.Where(c=>c.IsAccepted==true).ToListAsync();
         }
-<<<<<<< Updated upstream
         public async Task<IEnumerable<Course>> GetInstructorCourses(string Id)
         {
             return await _context.Courses
                 .Where(c => c.IsAccepted == true)
                 .Where(c=>c.InstructorId==Id).ToListAsync();
         }
-=======
->>>>>>> Stashed changes
+
         public async Task<IEnumerable<Course>> GetAllRequestedCourses()
         {
             return await _context.Courses.Where(c => c.IsAccepted == false).ToListAsync();
