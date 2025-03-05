@@ -9,7 +9,7 @@ namespace LMS.Repositories.Interfaces
         Task Update(Category category);
         Task Delete(Category category);
         Task<Category> GetCategoryById(int id);
-        Task<List<Category>> GetAllCategories();
+        Task<IEnumerable<Category>> GetAllCategories();
         Task<Category> SearchCategoryByName(string name);
         int GetCategoryCount();
     }

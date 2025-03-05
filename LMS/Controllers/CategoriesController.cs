@@ -7,34 +7,45 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS.Data;
 using LMS.Models;
+//added
+using System.Security.Claims;
+using LMS.Repositories.Interfaces;
 
 namespace LMS.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICategoryRepository _categoryRepo;
+
+        public CategoriesController( ICategoryRepository categoryRepo, IHttpContextAccessor httpContextAccessor)
         {
-            _context = context;
+            _httpContextAccessor = httpContextAccessor; // Inject HttpContextAccessor
+            _categoryRepo=categoryRepo;
+        }
+
+        // loggedIn User ID
+        public string GetLoggedInUserId()
+        {
+            return _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            string id = GetLoggedInUserId();
+
+
+
+            return View(await _categoryRepo.GetAllCategories());
         }
 
         // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await _categoryRepo.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();
@@ -46,6 +57,7 @@ namespace LMS.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
+            
             return View();
         }
 
@@ -58,22 +70,17 @@ namespace LMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                await _categoryRepo.Add(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
 
         // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories.FindAsync(id);
+      
+            var category = await _categoryRepo.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();
@@ -97,12 +104,11 @@ namespace LMS.Controllers
             {
                 try
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    await _categoryRepo.Update(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!await CategoryExists(category.Id))
                     {
                         return NotFound();
                     }
@@ -117,15 +123,11 @@ namespace LMS.Controllers
         }
 
         // GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+         
+            var category = await _categoryRepo.GetCategoryById(id);
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -139,19 +141,19 @@ namespace LMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _categoryRepo.GetCategoryById(id);
             if (category != null)
             {
-                _context.Categories.Remove(category);
+                await _categoryRepo.Delete(category);
             }
 
-            await _context.SaveChangesAsync();
+           
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private async Task<bool> CategoryExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            return await _categoryRepo.GetCategoryById(id) != null;
         }
     }
 }

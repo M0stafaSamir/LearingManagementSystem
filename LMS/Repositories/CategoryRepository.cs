@@ -25,7 +25,7 @@ namespace LMS.Repositories
             await _context.SaveChangesAsync(); 
         }
 
-        public async Task<List<Category>> GetAllCategories()
+        public async Task<IEnumerable<Category>> GetAllCategories()
         {
            return await _context.Categories.ToListAsync();
         }

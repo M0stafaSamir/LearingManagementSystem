@@ -1,5 +1,7 @@
 using LMS.Data;
 using LMS.Models;
+using LMS.Repositories;
+using LMS.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -27,6 +29,8 @@ namespace LMS
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+            builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 
             builder.Services.AddAuthentication().AddFacebook(opt =>
             {

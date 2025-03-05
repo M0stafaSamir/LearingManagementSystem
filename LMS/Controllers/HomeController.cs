@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LMS.Controllers
 {
 
-    [Authorize(Roles = "Student")]
+    //[Authorize(Roles = "Student")]
     public class HomeController : Controller
     {
        
