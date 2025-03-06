@@ -30,22 +30,36 @@ namespace LMS.Repositories
 
         public async Task<IEnumerable<Course>> GetAllCourses()
         {
-            return await _context.Courses.Where(c=>c.IsAccepted==true).ToListAsync();
+            return await _context.Courses
+                .Include(c=>c.Category)
+                .Include(c=>c.Instructor)
+                .Where(c=>c.IsAccepted==true)
+                .ToListAsync();
         }
         public async Task<IEnumerable<Course>> GetInstructorCourses(string Id)
         {
             return await _context.Courses
+                .Include(c=>c.Category)
+                .Include (c=>c.Instructor)  
                 .Where(c => c.IsAccepted == true)
-                .Where(c=>c.InstructorId==Id).ToListAsync();
+                .Where(c=>c.InstructorId==Id)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Course>> GetAllRequestedCourses()
         {
-            return await _context.Courses.Where(c => c.IsAccepted == false).ToListAsync();
+            return await _context.Courses
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .Where(c => c.IsAccepted == false)
+                .ToListAsync();
         }
         public async Task<Course> GetCourseById(int id)
         {
-            return await _context.Courses.FirstOrDefaultAsync(c => c.Id == id); 
+            return await _context.Courses
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .FirstOrDefaultAsync(c => c.Id == id); 
         }
 
         public int GetCourseCount()
@@ -53,23 +67,40 @@ namespace LMS.Repositories
             return _context.Courses.Count();
         }
 
-        public async Task<IEnumerable<Course>> GetCoursesByCategoryId(int categoryId)
+        public async Task<IEnumerable<Course>>GetCoursesByCategoryId(int categoryId)
         {
-            return await _context.Courses.Where(c => c.CategoryId == categoryId).ToListAsync(); 
+            return await _context.Courses
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .Where(c => c.CategoryId == categoryId).ToListAsync(); 
         }
 
-        public async Task<IEnumerable<Course>> GetCoursesByInstructorId(int instructorId)
+        public async Task<IEnumerable<Course>> GetCoursesByInstructorId(string instructorId)
         {
-            return await _context.Courses.Where(c=>c.IsAccepted==true).ToListAsync();
+            return await _context.Courses
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .Where(c=>c.IsAccepted==true)
+                .ToListAsync();
         }
-        public async Task<IEnumerable<Course>> GetRequestedCoursesByInstructorId(int instructorId)
+
+
+        public async Task<IEnumerable<Course>> GetRequestedCoursesByInstructorId(string instructorId)
         {
-            return await _context.Courses.Where(c => c.IsAccepted == false).ToListAsync();
+            return await _context.Courses
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .Where(c => c.IsAccepted == false).ToListAsync();
         }
+
+
 
         public async Task<IEnumerable<Course>> SearchCourseByName(string name)
         {
-            return await _context.Courses.Where(c=>c.Name==name).ToListAsync();
+            return await _context.Courses
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .Where(c=>c.Name==name).ToListAsync();
         }
 
         public async Task UpdateCourse(Course course)

@@ -24,16 +24,9 @@ namespace LMS.Data
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<StudentEnrollCourse> studentEnrollCourses { get; set; }
-<<<<<<< Updated upstream
-
-
         public DbSet<AppUser> AppUsers { get; set; } 
         public DbSet<LMS.ViewModel.CreateAdminViewModel> CreateAdminViewModel { get; set; }
-=======
         public DbSet<WishList> WishLists { get; set; } 
-
-
->>>>>>> Stashed changes
 
     }
 }
