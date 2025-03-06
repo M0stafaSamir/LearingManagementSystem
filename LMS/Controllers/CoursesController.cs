@@ -68,7 +68,7 @@ namespace LMS.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 await _courseRepository.CreateCourse(CreatedCourse, Image, userId); 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(CreateChapter));
             }
          
             return RedirectToAction(nameof(CreateChapter));
