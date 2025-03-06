@@ -1,0 +1,26 @@
+﻿@model LMS.Models.InstractourModel.Course
+
+@{
+    // ViewData["Title"] = "_CardPartial";
+}
+
+<div>
+    <dl class="row justify-content-center align-items-center">
+        <div class="card" style="width: 90%;">
+            @if (!string.IsNullOrEmpty(@Model.Image))
+            {
+                <img src="~/images/courses/@Model.Image" class="img-fluid" />
+            }
+            else
+            {
+                <p>No image</p>
+            }
+            <div class="card-body">
+                <h5 class="card-title">@Model.Name</h5>
+                <p class="card-text">@Model.Price</p>
+                <p class="card-text">@Model.Description</p>
+            </div>
+        </div>
+    </dl>
+</div>
+
