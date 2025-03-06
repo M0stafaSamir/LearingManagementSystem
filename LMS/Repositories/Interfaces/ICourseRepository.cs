@@ -1,4 +1,5 @@
 ﻿using LMS.Models.InstractourModel;
+using LMS.ViewModel.Inst;
 
 namespace LMS.Repositories.Interfaces
 {
@@ -16,7 +17,7 @@ namespace LMS.Repositories.Interfaces
         Task<IEnumerable<Course>> GetCoursesByCategoryId(int categoryId);
         Task<IEnumerable<Course>> GetCoursesByInstructorId(string instructorId);
         Task<IEnumerable<Course>> GetRequestedCoursesByInstructorId(string instructorId);
-
+        Task CreateCourse(CreateCourseViewModel course, IFormFile Image,string InstID); 
         int GetCourseCount();
     }
 }

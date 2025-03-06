@@ -7,37 +7,34 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS.Data;
 using LMS.Models.InstractourModel;
+using LMS.Repositories.Interfaces;
+using System.Security.Claims;
+using LMS.ViewModel.Inst;
 
 namespace LMS.Controllers
 {
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICourseRepository _courseRepository;
 
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, ICourseRepository courseRepository)
         {
             _context = context;
+            _courseRepository = courseRepository;   
         }
-
-        // GET: Courses
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Courses.Include(c => c.Category).Include(c => c.Instructor);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var courses = _courseRepository.GetInstructorCourses(userId);   
+            return View(await courses);
         }
 
-        // GET: Courses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+          
 
-            var course = await _context.Courses
-                .Include(c => c.Category)
-                .Include(c => c.Instructor)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var course = await _courseRepository.GetCourseById(id); 
             if (course == null)
             {
                 return NotFound();
@@ -46,33 +43,61 @@ namespace LMS.Controllers
             return View(course);
         }
 
-        // GET: Courses/Create
+
+
+
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // POST: Courses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Image,IsAccepted,IsDeleted,CategoryId,InstructorId")] Course course)
+        public async Task<IActionResult> Create([Bind("Name,Description,Price,Image,CategoryId")] CreateCourseViewModel CreatedCourse, IFormFile Image)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(course);
-                await _context.SaveChangesAsync();
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                await _courseRepository.CreateCourse(CreatedCourse, Image, userId); 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", course.CategoryId);
-            ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id", course.InstructorId);
-            return View(course);
+         
+            return RedirectToAction(nameof(CreateCourse));
         }
 
-        // GET: Courses/Edit/5
+
+
+        public IActionResult CreateCourse()
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCourse([Bind("Name,Description,Price,Image,CategoryId")] CreateCourseViewModel CreatedCourse, IFormFile Image)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                await _courseRepository.CreateCourse(CreatedCourse, Image, userId);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+
+
+
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,9 +115,7 @@ namespace LMS.Controllers
             return View(course);
         }
 
-        // POST: Courses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Image,IsAccepted,IsDeleted,CategoryId,InstructorId")] Course course)
