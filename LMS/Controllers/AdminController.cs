@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Controllers
 {
+    /// <summary>
+    /// tryyy
+    /// </summary>
     public class AdminController : Controller
     {
         private readonly ICourseRepository _courseRepo;
