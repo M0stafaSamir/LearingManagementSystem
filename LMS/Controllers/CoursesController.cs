@@ -17,11 +17,18 @@ namespace LMS.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ICourseRepository _courseRepository;
+        private readonly IChapterRepository _chapterRepository;
+        private readonly ILessonRepository _lessonRepository; 
 
-        public CoursesController(ApplicationDbContext context, ICourseRepository courseRepository)
+        public CoursesController(ApplicationDbContext context
+            ,ICourseRepository courseRepository
+            , IChapterRepository chapterRepository
+            , ILessonRepository lessonRepository)
         {
             _context = context;
-            _courseRepository = courseRepository;   
+            _courseRepository = courseRepository;
+            _chapterRepository = chapterRepository;
+            _lessonRepository = lessonRepository; 
         }
         public async Task<IActionResult> Index()
         {
@@ -32,7 +39,6 @@ namespace LMS.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-          
 
             var course = await _courseRepository.GetCourseById(id); 
             if (course == null)
@@ -65,37 +71,59 @@ namespace LMS.Controllers
                 return RedirectToAction(nameof(Index));
             }
          
-            return RedirectToAction(nameof(CreateCourse));
+            return RedirectToAction(nameof(CreateChapter));
         }
 
 
 
-        public IActionResult CreateCourse()
+        public async Task<IActionResult> CreateChapter()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var courses = await _courseRepository.GetInstructorCourses(userId);
+            ViewData["CourseID"] = new SelectList(courses, "Id", "Name");
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateCourse([Bind("Name,Description,Price,Image,CategoryId")] CreateCourseViewModel CreatedCourse, IFormFile Image)
+        public async Task<IActionResult> CreateChapter([Bind("Name,Title,CourseID")] Chapter chapter)
         {
             if (ModelState.IsValid)
             {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                await _courseRepository.CreateCourse(CreatedCourse, Image, userId);
-                return RedirectToAction(nameof(Index));
+                ViewBag.CourseID = chapter.CourseID; 
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _chapterRepository.AddChapter(chapter); 
+                return RedirectToAction(nameof(CreateLesson));
             }
-
             return RedirectToAction(nameof(Index));
         }
 
 
 
+        //continue
+        public async Task<IActionResult> CreateLesson()
+        {
+            dynamic CourseID = ViewBag.CourseID; 
+            var chapters = await _chapterRepository.GetChaptersByCourseId(CourseID);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var courses = await _courseRepository.GetInstructorCourses(userId);
+            ViewData["CourseID"] = new SelectList(courses, "Id", "Name");
+            ViewData["CourseID"] = new SelectList(courses, "Id", "Name");
+            return View();
+        }
 
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateLesson([Bind("Name,Title,CourseID")] Lesson lesson)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _lessonRepository.AddLesson(lesson);
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
+        }
 
 
         public async Task<IActionResult> Edit(int? id)

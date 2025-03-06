@@ -32,7 +32,9 @@ namespace LMS
 
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
             builder.Services.AddScoped<ICourseRepository,CourseRepository>();
-            
+            builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
+            builder.Services.AddScoped<ILessonRepository, LessonRepository>();
+
             builder.Services.AddScoped<IAdminRepository,AdminRepository>();
 
 
