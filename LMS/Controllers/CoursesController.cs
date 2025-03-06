@@ -53,9 +53,6 @@ namespace LMS.Controllers
             return View(course);
         }
 
-
-
-
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
