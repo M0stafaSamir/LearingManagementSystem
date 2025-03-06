@@ -4,9 +4,13 @@
 
 @{
     if (User.IsInRole("Instructor")){
-        Layout = "_LayoutAdmin";
-    }else{
-
-    Layout = "_Layout";
+        Layout = "_LayoutInstructor";
     }
+    else if (User.IsInRole("Admin"))
+    {
+
+    Layout = "_LayoutAdmin";
+    }
+    Layout = "_Layout";
+
 }
