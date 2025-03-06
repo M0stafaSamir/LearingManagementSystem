@@ -39,13 +39,11 @@ namespace LMS.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-
             var course = await _courseRepository.GetCourseById(id); 
             if (course == null)
             {
                 return NotFound();
             }
-
             return View(course);
         }
 
@@ -103,10 +101,10 @@ namespace LMS.Controllers
         //continue
         public async Task<IActionResult> CreateLesson()
         {
-            dynamic CourseID = ViewBag.CourseID; 
-            var chapters = await _chapterRepository.GetChaptersByCourseId(CourseID);
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var courses = await _courseRepository.GetInstructorCourses(userId);
+            //var chapters = await _chapterRepository.GetChaptersByCourseId(CourseID);
+            ViewBag.Courses = courses; 
             ViewData["CourseID"] = new SelectList(courses, "Id", "Name");
             ViewData["CourseID"] = new SelectList(courses, "Id", "Name");
             return View();
