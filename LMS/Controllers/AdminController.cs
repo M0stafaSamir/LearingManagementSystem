@@ -1,6 +1,7 @@
 ﻿using LMS.Models;
 using LMS.Models.InstractourModel;
 using LMS.Repositories.Interfaces;
+using LMS.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,15 +55,22 @@ namespace LMS.Controllers
 
 
         // GET: AdminController/AllAdmins/
-        public async Task<IActionResult> AllAdmins(int id)
+        public async Task<IActionResult> AllAdmins()
         {
             return View(await _adminRepo.GetAllAdmins());
         }
 
 
+
+        // GET: Create Admin Account
+        public async Task<IActionResult> CreateAdmin()
+        {
+                return View();
+        }
+
         // POST: Create Admin Account
         [HttpPost]
-        public async Task<IActionResult> CreateAdmin(AppUser admin)
+        public async Task<IActionResult> CreateAdmin(CreateAdminViewModel admin)
         {
             try
             {
@@ -72,6 +80,30 @@ namespace LMS.Controllers
             catch
             {
                 return View("CreateAdmin", admin);
+            }
+        }
+
+
+
+
+        // GET: Delete Admin Account
+        public async Task<IActionResult> DeleteAdmin(string id)
+        {
+            return View(await _adminRepo.GetAdminById(id));
+        }
+
+        // POST: Create Admin Account
+        [HttpPost]
+        public async Task<IActionResult> RemoveAdmin(string Id)
+        {
+            try
+            {
+                await _adminRepo.DeleteAdminUser(Id);
+                return RedirectToAction("AllAdmins");
+            }
+            catch
+            {
+                return View("DeleteAdmin", Id);
             }
         }
 

@@ -3,6 +3,7 @@ using LMS.Models.InstractourModel;
 using LMS.Models.StudentModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using LMS.ViewModel;
 
 namespace LMS.Data
 {
@@ -27,6 +28,7 @@ namespace LMS.Data
 
 
         public DbSet<AppUser> AppUsers { get; set; } 
+        public DbSet<LMS.ViewModel.CreateAdminViewModel> CreateAdminViewModel { get; set; }
 
     }
 }

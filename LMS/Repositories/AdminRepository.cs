@@ -1,6 +1,8 @@
 ﻿using LMS.Data;
 using LMS.Models;
 using LMS.Repositories.Interfaces;
+using LMS.ViewModel;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,24 +12,49 @@ namespace LMS.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdminRepository(ApplicationDbContext context, UserManager<AppUser> userManager)
+
+        public AdminRepository(ApplicationDbContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager= roleManager;  
         }
 
-        public async Task AddAdminUser(AppUser user)
+        public async Task AddAdminUser(CreateAdminViewModel admin)
         {
-            if (user != null)
+            var adminUser = new AppUser
             {
-                await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
-                await _userManager.AddToRoleAsync(user, "Admin");
-                await _context.SaveChangesAsync();
+                Name = admin.FullName,
+                Email = admin.Email,
+                EmailConfirmed = true,
+                UserName = admin.UserName,
+            };
+            var result = await _userManager.CreateAsync(adminUser, admin.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(adminUser, "Admin");
+
+
+            }
+        }
+
+        public async Task DeleteAdminUser(string Id)
+        {
+            var adminUser = await _userManager.FindByIdAsync(Id);
+            if (adminUser != null) 
+            {
+                var result = await _userManager.DeleteAsync(adminUser);
 
             }
 
+        }
+
+        public async Task<AppUser> GetAdminById(string Id)
+        {
+            return await _userManager.FindByIdAsync(Id);
         }
 
         public async Task<IEnumerable<AppUser>> GetAllAdmins()

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<LMS.Models.AppUser>
+
+@{
+    ViewData["Title"] = "AllAdmins";
+}
+<div class="container">
+<h1>AllAdmins</h1>
+
+<p>
+        <a asp-action="CreateAdmin">Create New Admin</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th> @Html.DisplayNameFor(model => model.Email)</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+            <td>
+
+                        <a asp-action="DeleteAdmin" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
