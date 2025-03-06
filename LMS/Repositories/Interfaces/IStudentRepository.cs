@@ -20,7 +20,7 @@ public interface IStudentRepository
 
     // Notes management
     void AddNoteToLesson(string studentId, int lessonId, string content);
-    IEnumerable<Note> GetAllNotes(string studentId);
+    IEnumerable<Note> GetAllNotes(string studentId,int lessonId);
     void UpdateNote(int noteId, string newContent);
     void DeleteNote(int noteId);
 

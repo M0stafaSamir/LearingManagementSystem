@@ -28,56 +28,8 @@
     </div>
 </div>
 
-@* Recommended Courses *@
-@if (Model.RecommendedCourses?.Any() == true)
-{
-    <h2 class="text-center mt-5 text-success">Recommended Courses</h2>
-    <div class="container">
-        <div class="row">
-            @foreach (var course in Model.RecommendedCourses)
-            {
-                <div class="col-md-4">
-                    <div class="card course-card">
-                        <img src="@course.Image" class="card-img-top" alt="@course.Name">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">
-                                <a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@course.Id">@course.Name</a>
-                            </h5>
-                            <p class="card-text flex-grow-1">@course.Description</p>
-                            <p class="text-muted">Instructor: @course.Instructor.Name</p>
-                            <p class="fw-bold">Price: @(course.Price == 0 ? "Free" : "$" + course.Price)</p>
-
-                            <div class="mt-auto">
-                                @if (course.Price == 0)
-                                {
-                                    <form method="post" asp-action="EnrollCourse" asp-controller="Student">
-                                        <input type="hidden" name="courseId" value="@course.Id" />
-                                        <button type="submit" class="btn btn-success w-100">Enroll Now</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
-                                        <input type="hidden" name="courseId" value="@course.Id" />
-                                        <button type="submit" class="btn btn-success w-100">Purchase</button>
-                                    </form>
-                                }
-
-                                <form method="post" asp-action="AddToWishlist" asp-controller="Student">
-                                    <input type="hidden" name="courseId" value="@course.Id" />
-                                    <button type="submit" class="btn btn-outline-success w-100 mt-2">Add to Wishlist</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-}
-
 @* All Courses *@
-<h2 class="text-center mt-5 text-success">All Courses</h2>
+<h2 class="text-center m-5 text-success">All Courses</h2>
 <div class="container">
     <div class="row">
         @foreach (var course in Model.Courses)
@@ -135,7 +87,53 @@
         }
     </div>
 </div>
+@* Recommended Courses *@
+@if (Model.RecommendedCourses?.Any() == true)
+{
+    <h2 class="text-center mt-5 text-success">Recommended Courses</h2>
+    <div class="container">
+        <div class="row">
+            @foreach (var course in Model.RecommendedCourses)
+            {
+                <div class="col-md-4">
+                    <div class="card course-card">
+                        <img src="@course.Image" class="card-img-top" alt="@course.Name">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@course.Id">@course.Name</a>
+                            </h5>
+                            <p class="card-text flex-grow-1">@course.Description</p>
+                            <p class="text-muted">Instructor: @course.Instructor.Name</p>
+                            <p class="fw-bold">Price: @(course.Price == 0 ? "Free" : "$" + course.Price)</p>
 
+                            <div class="mt-auto">
+                                @if (course.Price == 0)
+                                {
+                                    <form method="post" asp-action="EnrollCourse" asp-controller="Student">
+                                        <input type="hidden" name="courseId" value="@course.Id" />
+                                        <button type="submit" class="btn btn-success w-100">Enroll Now</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
+                                        <input type="hidden" name="courseId" value="@course.Id" />
+                                        <button type="submit" class="btn btn-success w-100">Purchase</button>
+                                    </form>
+                                }
+
+                                <form method="post" asp-action="AddToWishlist" asp-controller="Student">
+                                    <input type="hidden" name="courseId" value="@course.Id" />
+                                    <button type="submit" class="btn btn-outline-success w-100 mt-2">Add to Wishlist</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
 @* JavaScript for Search *@
 <script>
     function searchCourses() {

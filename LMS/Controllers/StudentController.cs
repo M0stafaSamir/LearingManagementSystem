@@ -29,7 +29,7 @@ public class StudentController : Controller
         var courseProgress = new Dictionary<int, double>(); 
         foreach (var course in purchasedCourses)
         {
-            courseProgress[course.Id] = _studentRepo.GetCourseProgress(studentId, course.Id);
+            courseProgress[course.CourseId] = _studentRepo.GetCourseProgress(studentId, course.CourseId);
         }
 
         var model = new StudentHomeViewModel
@@ -117,7 +117,7 @@ public class StudentController : Controller
         var courseProgress = new Dictionary<int, double>();
         foreach (var course in enrolledCourses)
         {
-            courseProgress[course.Id] = _studentRepo.GetCourseProgress(studentId, course.Id);
+            courseProgress[course.CourseId] = _studentRepo.GetCourseProgress(studentId, course.CourseId);
         }
         ViewBag.courseProgress = courseProgress;
         return View(Studentcourses);
@@ -193,7 +193,7 @@ public class StudentController : Controller
 
         foreach (var course in enrolledCourses)
         {
-            _studentRepo.CheckCourseCompletion(studentId, course.Id);
+            _studentRepo.CheckCourseCompletion(studentId, course.CourseId);
         }
 
         var certificates = _studentRepo.GetAllCertificates(studentId);
@@ -202,14 +202,51 @@ public class StudentController : Controller
 
     public IActionResult LessonDetails(int lessonId)
     {
-        var lesson = _studentRepo.GetLessonDetails(lessonId, User.Identity.Name);
-        if (lesson == null) return NotFound();
-        if (!_studentRepo.HasPurchasedCourse(lesson.Chapter.CourseID, User.Identity.Name))
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var lesson = _studentRepo.GetLessonDetails(lessonId,studentId);
+        if (lesson == null)
         {
-            return RedirectToAction("CourseDetails", new { courseId = lesson.Chapter.CourseID });
+            return NotFound();
         }
-        _studentRepo.MarkLessonAsStudied(User.Identity.Name, lessonId);
-        return View(lesson);
+
+        var studentNotes = _studentRepo.GetAllNotes(studentId, lessonId);
+
+        _studentRepo.MarkLessonAsStudied(studentId, lessonId);
+        _studentRepo.GetCourseProgress(studentId, lesson.Chapter.CourseID);
+
+        var viewModel = new LessonDetailsViewModel
+        {
+            LessonId = lesson.Id,
+            LessonName = lesson.Name,
+            MediaLink = lesson.MediaLink,
+            Notes = studentNotes
+        };
+
+        return View(viewModel);
     }
-   
+
+    [HttpPost]
+    public IActionResult SaveNote(int lessonId, int noteId, string noteContent)
+    {
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (noteId == 0) // Add new note
+        {
+            _studentRepo.AddNoteToLesson(studentId, lessonId, noteContent);
+        }
+        else // Update existing note
+        {
+            _studentRepo.UpdateNote(noteId, noteContent);
+        }
+
+        return RedirectToAction("LessonDetails", new { lessonId });
+    }
+
+    [HttpPost]
+    public IActionResult DeleteNote(int noteId)
+    {
+        _studentRepo.DeleteNote(noteId);
+        return Redirect(Request.Headers["Referer"].ToString()); 
+    }
+
 }

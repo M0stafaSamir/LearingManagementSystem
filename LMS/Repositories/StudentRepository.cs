@@ -54,7 +54,7 @@ public class StudentRepository : IStudentRepository
             .ToList();
 
         return _context.Courses
-            .Where(c => enrolledCategories.Contains(c.Category) && !c.StudentEnrollments.Any(e => e.StudentId == studentId))
+            .Where(c => enrolledCategories.Contains(c.Category) && !c.StudentEnrollments.Any(e => e.StudentId == studentId)).Include(C=>C.Instructor)
             .ToList();
     }
 
@@ -71,23 +71,21 @@ public class StudentRepository : IStudentRepository
 
     public CertificateForStudent GetCertificateForCourse(string studentId, int courseId)
     {
-        bool completed = _context.StudentStudiedLessons
-            .Where(s => s.StudentId == studentId && s.Lesson.Id == courseId)
-            .Count() == _context.Lessons.Count(l => l.Id == courseId);
-
-        if (completed)
+        if (!_context.Certificates.Any(ec => ec.StudentId == studentId && ec.CourseId == courseId))
         {
             var certificate = new CertificateForStudent
             {
                 StudentId = studentId,
                 CourseId = courseId,
-                AcquireDate = DateTime.Now
+                AcquireDate = DateTime.Now,
+                Grade = "Excellent"
             };
             _context.Certificates.Add(certificate);
             _context.SaveChanges();
             return certificate;
         }
-        return null;
+
+        else return null;
     }
     public bool CheckCourseCompletion(string studentId, int courseId)
     {
@@ -124,9 +122,9 @@ public class StudentRepository : IStudentRepository
         _context.SaveChanges();
     }
 
-    public IEnumerable<Note> GetAllNotes(string studentId)
+    public IEnumerable<Note> GetAllNotes(string studentId, int lessonId)
     {
-        return _context.Notes.Where(n => n.StudentId == studentId).ToList();
+        return _context.Notes.Where(n => n.StudentId == studentId && n.LessonId==lessonId).ToList();
     }
 
     public void UpdateNote(int noteId, string newContent)
@@ -263,13 +261,14 @@ public class StudentRepository : IStudentRepository
     public Lesson GetLessonDetails(int lessonId, string studentId)
     {
         var lesson = _context.Lessons
-            .Where(l => l.Id == lessonId)
+            .Where(l => l.Id == lessonId).Include(c=>c.Chapter).ThenInclude(c=>c.Course)
             .Select(l => new Lesson
             {
                 Id = l.Id,
                 Name = l.Name,
                 MediaLink = l.MediaLink,
                 ChapterID = l.ChapterID,
+                Chapter = l.Chapter,
                 Notes = _context.Notes
                     .Where(n => n.LessonId == lessonId && n.StudentId == studentId)
                     .Select(n => new Note

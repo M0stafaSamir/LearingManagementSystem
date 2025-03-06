@@ -1,0 +1,97 @@
+﻿@model LMS.ViewModel.LessonDetailsViewModel
+
+<div class="container mt-4">
+    <!-- Lesson Title -->
+    <h2 class="text-center text-success mb-4">@Model.LessonName</h2>
+
+    <div class="row">
+        <div class="embed-responsive embed-responsive-16by9 shadow-lg rounded">
+            <iframe id="lessonVideo" class="embed-responsive-item"
+                    src="@Model.MediaLink"
+                    allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Notes Section -->
+    <div class="mt-5">
+        <h4 class="text-success">Your Notes</h4>
+
+        <!-- Notes List -->
+        @if (Model.Notes.Any())
+        {
+            <ul class="list-group mt-3">
+                @foreach (var note in Model.Notes)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>@note.Content</strong>
+                            <small class="text-muted">(@note.CreatedAt.ToShortDateString())</small>
+                        </span>
+
+                        <div>
+                            <!-- Update Note Button -->
+                            <button class="btn btn-warning btn-sm" onclick="editNote(@note.Id, '@note.Content')">
+                                ✏ Edit
+                            </button>
+
+                            <!-- Delete Note Form -->
+                            <form method="post" asp-action="DeleteNote" asp-controller="Student" style="display:inline;">
+                                <input type="hidden" name="noteId" value="@note.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">🗑 Delete</button>
+                            </form>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">You haven't added any notes yet.</p>
+        }
+    </div>
+
+    <!-- Add & Edit Note Form -->
+    <div class="mt-4">
+        <form method="post" asp-action="SaveNote" asp-controller="Student" class="shadow-sm p-4 bg-light rounded">
+            <input type="hidden" name="lessonId" value="@Model.LessonId" />
+            <input type="hidden" id="noteId" name="noteId" value="0" />
+
+            <label for="noteContent" class="form-label fw-bold">Add a new note:</label>
+            <textarea id="noteContent" name="noteContent" class="form-control" rows="3"
+                      placeholder="Type your note here..."></textarea>
+
+            <button type="submit" class="btn btn-success mt-3 w-100">💾 Save Note</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function editNote(noteId, content) {
+        document.getElementById('noteId').value = noteId;
+        document.getElementById('noteContent').value = content;
+        document.getElementById('noteContent').focus();
+    }
+</script>
+
+<style>
+    iframe {
+        width: 100%;
+        height: 500px; /* Ensure a proper size */
+        border-radius: 10px;
+        border: none;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+    }
+
+    .list-group-item {
+        border-radius: 8px;
+    }
+
+    .shadow-lg {
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    }
+</style>
