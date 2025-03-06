@@ -47,7 +47,7 @@ namespace LMS.Repositories
             return await _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.Instructor)
-                //.Where(c => c.IsAccepted == true)
+                .Where(c => c.IsAccepted == true)
                 .Where(c => c.InstructorId == Id)
                 .ToListAsync();
         }
@@ -96,6 +96,7 @@ namespace LMS.Repositories
             return await _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.Instructor)
+                .Where(c=>c.InstructorId==instructorId)
                 .Where(c => c.IsAccepted == false).ToListAsync();
         }
 

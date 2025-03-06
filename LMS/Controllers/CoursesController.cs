@@ -36,6 +36,12 @@ namespace LMS.Controllers
             var courses = _courseRepository.GetInstructorCourses(userId);   
             return View(await courses);
         }
+        public async Task<IActionResult> PendingCourses()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var courses = _courseRepository.GetRequestedCoursesByInstructorId(userId);
+            return View(await courses);
+        }
 
         public async Task<IActionResult> Details(int id)
         {
