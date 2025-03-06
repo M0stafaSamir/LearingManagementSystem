@@ -1,92 +1,142 @@
 ﻿@model LMS.ViewModel.StudentHomeViewModel
 
-<h2>Recommended Courses</h2>
-<div>
-    @foreach (var course in Model.RecommendedCourses)
-    {
-        <div class="course-card">
-            <img src="@course.Image" alt="@course.Name" />
-            <h3><a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@course.Id">@course.Name</a></h3>
-            <p>@course.Description</p>
-            <p>Price: @(course.Price == 0 ? "Free" : "$" + course.Price)</p>
-            <p>Instructor: @course.Instructor.Name</p>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
 
-            @if (course.Price == 0)
-            {
-                <form method="post" asp-action="EnrollCourse" asp-controller="Student">
-                    <input type="hidden" name="courseId" value="@course.Id" />
-                    <button type="submit">Enroll Now</button>
-                </form>
-            }
-            else
-            {
-                <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
-                    <input type="hidden" name="courseId" value="@course.Id" />
-                    <button type="submit">Purchase</button>
-                </form>
-            }
-
-            <form method="post" asp-action="AddToWishlist" asp-controller="Student">
-                <input type="hidden" name="courseId" value="@course.Id" />
-                <button type="submit">Add to Wishlist</button>
-            </form>
+@* Search Bar *@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" id="searchBox" class="form-control" placeholder="Search courses..." />
         </div>
-    }
+        <div class="col-md-4">
+            <select id="categoryDropdown" class="form-select">
+                <option value="">All Categories</option>
+                @foreach (Category category in ViewBag.Categories)
+                {
+                    <option value="@category.Name">@category.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success w-100" onclick="searchCourses()">Search</button>
+        </div>
+    </div>
 </div>
 
-<h2>All Courses</h2>
-<input type="text" id="searchBox" placeholder="Search courses..." />
-<select id="categoryDropdown">
-    <option value="">All Categories</option>
-    @foreach (var category in ViewBag.Categories)
-    {
-        <option value="@category">@category</option>
-    }
-</select>
-<button onclick="searchCourses()">Search</button>
-
-<div>
-    @foreach (var course in Model.Courses)
-    {
-        bool isPurchased = Model.PurchasedCourses?.Any(c => c.Id == course.Id) ?? false;
-        <div class="course-card">
-            <img src="@course.Image" alt="@course.Name" />
-            <h3><a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@course.Id">@course.Name</a></h3>
-            <p>@course.Description</p>
-            <p>Price: @(course.Price == 0 ? "Free" : "$" + course.Price)</p>
-            <p>Instructor: @course.Instructor.Name</p>
-
-            @if (isPurchased)
+@* Recommended Courses *@
+@if (Model.RecommendedCourses?.Any() == true)
+{
+    <h2 class="text-center mt-5 text-success">Recommended Courses</h2>
+    <div class="container">
+        <div class="row">
+            @foreach (var course in Model.RecommendedCourses)
             {
-                double progress = Model.CourseProgress?.ContainsKey(course.Id) == true ? Model.CourseProgress[course.Id] : 0;
-                <p>Progress: @progress%</p>
-            }
-            else
-            {
-                @if (course.Price == 0)
-                {
-                    <form method="post" asp-action="EnrollCourse" asp-controller="Student">
-                        <input type="hidden" name="courseId" value="@course.Id" />
-                        <button type="submit">Enroll Now</button>
-                    </form>
-                }
-                else
-                {
-                    <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
-                        <input type="hidden" name="courseId" value="@course.Id" />
-                        <button type="submit">Purchase</button>
-                    </form>
-                }
+                <div class="col-md-4">
+                    <div class="card course-card">
+                        <img src="@course.Image" class="card-img-top" alt="@course.Name">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@course.Id">@course.Name</a>
+                            </h5>
+                            <p class="card-text flex-grow-1">@course.Description</p>
+                            <p class="text-muted">Instructor: @course.Instructor.Name</p>
+                            <p class="fw-bold">Price: @(course.Price == 0 ? "Free" : "$" + course.Price)</p>
 
-                <form method="post" asp-action="AddToWishlist" asp-controller="Student">
-                    <input type="hidden" name="courseId" value="@course.Id" />
-                    <button type="submit">Add to Wishlist</button>
-                </form>
+                            <div class="mt-auto">
+                                @if (course.Price == 0)
+                                {
+                                    <form method="post" asp-action="EnrollCourse" asp-controller="Student">
+                                        <input type="hidden" name="courseId" value="@course.Id" />
+                                        <button type="submit" class="btn btn-success w-100">Enroll Now</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
+                                        <input type="hidden" name="courseId" value="@course.Id" />
+                                        <button type="submit" class="btn btn-success w-100">Purchase</button>
+                                    </form>
+                                }
+
+                                <form method="post" asp-action="AddToWishlist" asp-controller="Student">
+                                    <input type="hidden" name="courseId" value="@course.Id" />
+                                    <button type="submit" class="btn btn-outline-success w-100 mt-2">Add to Wishlist</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
-    }
+    </div>
+}
+
+@* All Courses *@
+<h2 class="text-center mt-5 text-success">All Courses</h2>
+<div class="container">
+    <div class="row">
+        @foreach (var course in Model.Courses)
+        {
+            bool isPurchased = Model.PurchasedCourses?.Any(c => c.CourseId == course.Id) ?? false;
+            double progress = Model.CourseProgress?.ContainsKey(course.Id) == true ? Model.CourseProgress[course.Id] : 0;
+
+            <div class="col-md-4">
+                <div class="card course-card">
+                    <img src="@course.Image" class="card-img-top" alt="@course.Name">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@course.Id">@course.Name</a>
+                        </h5>
+                        <p class="card-text flex-grow-1">@course.Description</p>
+                        <p class="text-muted">Instructor: @course.Instructor.Name</p>
+                        <p class="fw-bold">Price: @(course.Price == 0 ? "Free" : "$" + course.Price)</p>
+
+                        <div class="mt-auto">
+                            @if (isPurchased)
+                            {
+                                <p class="text-success">Progress: @progress%</p>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: @progress%;"
+                                         aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                @if (course.Price == 0)
+                                {
+                                    <form method="post" asp-action="EnrollCourse" asp-controller="Student">
+                                        <input type="hidden" name="courseId" value="@course.Id" />
+                                        <button type="submit" class="btn btn-success w-100">Enroll Now</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
+                                        <input type="hidden" name="courseId" value="@course.Id" />
+                                        <button type="submit" class="btn btn-success w-100">Purchase</button>
+                                    </form>
+                                }
+
+                                <form method="post" asp-action="AddToWishlist" asp-controller="Student">
+                                    <input type="hidden" name="courseId" value="@course.Id" />
+                                    <button type="submit" class="btn btn-outline-success w-100 mt-2">Add to Wishlist</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
+@* JavaScript for Search *@
 <script>
     function searchCourses() {
         var search = document.getElementById("searchBox").value;
@@ -94,3 +144,82 @@
         window.location.href = "@Url.Action("Index")" + "?search=" + encodeURIComponent(search) + "&category=" + encodeURIComponent(category);
     }
 </script>
+
+@* Custom CSS (Green Theme) *@
+<style>
+    .course-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        border: 2px solid #28a745;
+    }
+
+        .course-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 12px rgba(40, 167, 69, 0.3);
+        }
+
+    .card-title a {
+        text-decoration: none;
+        color: #28a745;
+    }
+
+        .card-title a:hover {
+            text-decoration: underline;
+        }
+
+    .btn {
+        border-radius: 5px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+    }
+
+    .btn-outline-success {
+        border-color: #28a745;
+        color: #28a745;
+    }
+
+        .btn-outline-success:hover {
+            background-color: #28a745;
+            color: white;
+        }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .flex-grow-1 {
+        flex-grow: 1;
+    }
+
+    .mt-auto {
+        margin-top: auto;
+    }
+
+    h2 {
+        font-weight: bold;
+    }
+
+    .progress {
+        height: 15px;
+        background: #e0e0e0;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: #5fcf80;
+        transition: width 0.5s ease-in-out;
+    }
+</style>

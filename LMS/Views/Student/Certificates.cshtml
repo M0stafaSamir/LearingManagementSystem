@@ -1,0 +1,50 @@
+﻿@model IEnumerable<LMS.Models.StudentModels.CertificateForStudent>
+
+<h2 class="text-center mb-4 text-success">Your Certificates</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-center text-muted fs-5">You haven't earned any certificates yet.</p>
+}
+else
+{
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var certificate in Model)
+            {
+                <div class="col">
+                    <div class="card shadow-lg border-0 certificate-card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-success fw-bold">@certificate.Course.Name</h5>
+                            <p class="text-muted">Awarded on: @certificate.AcquireDate.ToString("MMMM dd, yyyy")</p>
+                            <p class="fw-bold">Grade: <span class="text-primary">@certificate.Grade</span></p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<style>
+    .certificate-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 10px;
+        padding: 20px;
+        border-left: 5px solid #28a745;
+    }
+
+        .certificate-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(40, 167, 69, 0.2);
+        }
+
+    .text-success {
+        font-weight: bold;
+    }
+
+    .text-primary {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+</style>

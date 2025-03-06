@@ -1,0 +1,32 @@
+﻿@model LMS.Models.StudentModels.ReviewedCourse
+
+@{
+    ViewData["Title"] = "Write a Review";
+}
+
+<h2>Write a Review for @Model.Course.Name</h2>
+
+<form method="post" asp-action="SubmitReview" asp-controller="Student">
+    <input type="hidden" asp-for="CourseId" />
+
+    <div class="mb-3">
+        <label asp-for="Rating" class="form-label">Rating</label>
+        <select asp-for="Rating" class="form-select" required>
+            <option value="">Select Rating</option>
+            <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+            <option value="4">⭐⭐⭐⭐ (4)</option>
+            <option value="3">⭐⭐⭐ (3)</option>
+            <option value="2">⭐⭐ (2)</option>
+            <option value="1">⭐ (1)</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Comment" class="form-label">Your Review</label>
+        <textarea asp-for="Comment" class="form-control" rows="4" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+</form>
+
+<a asp-action="CourseDetails" asp-route-courseId="@Model.CourseId" class="btn btn-outline-secondary mt-3">Back to Course</a>

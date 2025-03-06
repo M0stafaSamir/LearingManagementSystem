@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 public interface IStudentRepository
 {
     // Course-related actions
-    IEnumerable<Course> GetAllCourses(string search = "", Category category = null);
+    IEnumerable<Course> GetAllCourses(string search = "", string category = null);
     Course GetCourseDetails(int courseId);
     IEnumerable<Course> SearchCoursesByName(string name);
     IEnumerable<Course> SearchCoursesByCategory(Category category);
@@ -29,13 +29,13 @@ public interface IStudentRepository
     IEnumerable<Course> GetAllPurchases(string studentId);
 
     // Review & Rating management
-    void AddReview(string studentId, int courseId, string reviewText, int rating);
+    void AddReview(ReviewedCourse reviewedCourse);
     void UpdateReview(int reviewId, string newReviewText, int newRating);
     void DeleteReview(int reviewId);
     IEnumerable<ReviewedCourse> GetAllReviews(int courseId);
 
     // Enrollment management
-    IEnumerable<Course> GetEnrolledCourses(string studentId);
+    IEnumerable<StudentEnrollCourse> GetEnrolledCourses(string studentId);
     void EnrollInCourse(string studentId, int courseId);
     void RemoveEnrollment(string studentId, int courseId);
     bool HasPurchasedCourse(int courseId, string studentId);
@@ -49,6 +49,6 @@ public interface IStudentRepository
 
     // Wishlist management
     void AddToWishlist(string studentId, int courseId);
-    IEnumerable<Course> GetWishlist(string studentId);
+    IEnumerable<WishList> GetWishlist(string studentId);
     void RemoveFromWishlist(string studentId, int courseId);
 }

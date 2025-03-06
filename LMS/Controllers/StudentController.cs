@@ -3,24 +3,28 @@ using LMS.Models.InstractourModel;
 using Microsoft.AspNetCore.Mvc;
 using LMS.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using LMS.Models.StudentModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+
 
 [Authorize]
 public class StudentController : Controller
 {
     private readonly IStudentRepository _studentRepo;
-
     public StudentController(IStudentRepository studentRepo)
     {
         _studentRepo = studentRepo;
     }
 
 
-    public IActionResult Index(string search, Category category)
+    public IActionResult Index(string search, string category)
     {
-        var studentId = User.Identity.Name;
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var courses = _studentRepo.GetAllCourses(search, category);
-        var purchasedCourses = _studentRepo.GetAllPurchases(studentId);
+        var purchasedCourses = _studentRepo.GetEnrolledCourses(studentId)?? new List<StudentEnrollCourse>();
 
         var courseProgress = new Dictionary<int, double>(); 
         foreach (var course in purchasedCourses)
@@ -40,38 +44,162 @@ public class StudentController : Controller
 
         return View(model);
     }
+
     [HttpPost]
     public IActionResult EnrollCourse(int courseId)
     {
-        var studentId = User.Identity.Name; 
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var course = _studentRepo.GetCourseDetails(courseId);
+
+        if (course == null || studentId == null)
+        {
+            return NotFound();
+        }
+
+        // Check if already enrolled
+
+        var enrollment = new StudentEnrollCourse
+        {
+            StudentId = studentId,
+            CourseId = courseId,
+            EnrollmentDate = DateTime.Now
+        };
+
         _studentRepo.EnrollInCourse(studentId,courseId);
+        
         return RedirectToAction("Index");
     }
+
 
     [HttpPost]
     public IActionResult PurchaseCourse(int courseId)
     {
         var course = _studentRepo.GetCourseDetails(courseId);
         if (course == null) return NotFound();
-
+        //Payment logic and view
         return View(course);
     }
 
     [HttpPost]
     public IActionResult AddToWishlist(int courseId)
     {
-        var studentId = User.Identity.Name;
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         _studentRepo.AddToWishlist(studentId,courseId );
         TempData["Message"] = "Course added to wishlist!";
         return RedirectToAction("Index");
     }
+    public IActionResult Wishlist()
+    {
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var wishlistItems = _studentRepo.GetWishlist(studentId) ?? new List<WishList>(); 
+        return View(wishlistItems);
+    }
+    [HttpPost]
+    public IActionResult RemoveFromWishlist(int courseId)
+    {
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+        _studentRepo.RemoveFromWishlist(studentId, courseId);
+        TempData["Message"] = "Course removed from wishlist.";
+       
+        return RedirectToAction("Wishlist");
+    }
+
+    public IActionResult EnrolledCourses()
+    {
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var enrolledCourses = _studentRepo.GetEnrolledCourses(studentId);
+        List<Course> Studentcourses = new();
+        foreach(var course in enrolledCourses)
+        {
+            Studentcourses.Add(_studentRepo.GetCourseDetails(course.CourseId));
+        }
+        var courseProgress = new Dictionary<int, double>();
+        foreach (var course in enrolledCourses)
+        {
+            courseProgress[course.Id] = _studentRepo.GetCourseProgress(studentId, course.Id);
+        }
+        ViewBag.courseProgress = courseProgress;
+        return View(Studentcourses);
+    }
+    [HttpPost]
+    public IActionResult UnenrollCourse(int courseId)
+    {
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        _studentRepo.RemoveEnrollment(studentId, courseId);
+
+        TempData["Message"] = "You have successfully unenrolled from the course.";
+        return RedirectToAction("EnrolledCourses");
+    }
     public IActionResult CourseDetails(int courseId)
     {
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var course = _studentRepo.GetCourseDetails(courseId);
-        if (course == null) return NotFound();
-        return View(course);
+
+        if (course == null)
+        {
+            return NotFound();
+        }
+
+        var isEnrolled = _studentRepo.HasPurchasedCourse(courseId,studentId);
+        var progress = isEnrolled ? _studentRepo.GetCourseProgress(studentId, courseId) : 0;
+        var reviews = _studentRepo.GetAllReviews(courseId);
+
+        var viewModel = new CourseDetailsViewModel
+        {
+            Course = course,
+            IsEnrolled = isEnrolled,
+            Progress = progress,
+            Reviews = reviews
+        };
+
+        return View(viewModel);
     }
+    public IActionResult AddReview(int courseId)
+    {
+        var model = new ReviewedCourse { CourseId = courseId ,Course=_studentRepo.GetCourseDetails(courseId)};
+        return View(model);
+    }
+    [HttpPost]
+    public IActionResult SubmitReview(ReviewedCourse model)
+    {
+        if (ModelState.IsValid)
+        {
+            var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var review = new ReviewedCourse
+            {
+                StudentId = studentId,
+                CourseId = model.CourseId,
+                Rating = model.Rating,
+                Comment = model.Comment,
+                DateTime = DateTime.Now
+            };
+
+            _studentRepo.AddReview(review);  
+            TempData["Message"] = "Review submitted successfully!";
+
+            return RedirectToAction("CourseDetails", new { courseId = model.CourseId });
+        }
+
+        return View("AddReview", model); 
+    }
+
+    public IActionResult Certificates()
+    {
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var enrolledCourses = _studentRepo.GetEnrolledCourses(studentId);
+
+        foreach (var course in enrolledCourses)
+        {
+            _studentRepo.CheckCourseCompletion(studentId, course.Id);
+        }
+
+        var certificates = _studentRepo.GetAllCertificates(studentId);
+        return View(certificates);
+    }
+
     public IActionResult LessonDetails(int lessonId)
     {
         var lesson = _studentRepo.GetLessonDetails(lessonId, User.Identity.Name);
@@ -83,19 +211,5 @@ public class StudentController : Controller
         _studentRepo.MarkLessonAsStudied(User.Identity.Name, lessonId);
         return View(lesson);
     }
-    public IActionResult EnrolledCourses()
-    {
-        var enrolledCourses = _studentRepo.GetEnrolledCourses(User.Identity.Name);
-        return View(enrolledCourses);
-    }
-    public IActionResult Wishlist()
-    {
-        var wishlist = _studentRepo.GetWishlist(User.Identity.Name);
-        return View(wishlist);
-    }
-    public IActionResult Certificates()
-    {
-        var certificates = _studentRepo.GetAllCertificates(User.Identity.Name);
-        return View(certificates);
-    }
+   
 }

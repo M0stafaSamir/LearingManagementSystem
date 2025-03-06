@@ -14,19 +14,23 @@ public class StudentRepository : IStudentRepository
         _context = context;
     }
 
-    public IEnumerable<Course> GetAllCourses(string search = "", Category category = null)
+    public IEnumerable<Course> GetAllCourses(string search = "", string category = "")
     {
-        var query = _context.Courses.AsQueryable();
+        var query = _context.Courses.Include(c => c.Instructor);
+
         if (!string.IsNullOrEmpty(search))
         {
-            query = query.Where(c => c.Name.Contains(search));
+            query = query.Where(c => c.Name.Contains(search)).Include(c=>c.Instructor);
         }
-        if (category!=null)
+
+        if (!string.IsNullOrEmpty(category) && category != "All Categories")
         {
-            query = query.Where(c => c.Category == category);
+            query = query.Where(c => c.Category.Name == category).Include(c => c.Instructor);
         }
+
         return query.ToList();
     }
+
     IEnumerable<Category> IStudentRepository.GetAllCategories()
     {
         return _context.Categories.ToList();
@@ -101,7 +105,10 @@ public class StudentRepository : IStudentRepository
 
     public IEnumerable<CertificateForStudent> GetAllCertificates(string studentId)
     {
-        return _context.Certificates.Where(c => c.StudentId == studentId).ToList();
+        return _context.Certificates
+                                   .Where(c => c.StudentId == studentId)
+                                   .Include(c => c.Course)
+                                   .ToList();
     }
 
     public void AddNoteToLesson(string studentId, int lessonId, string content)
@@ -163,21 +170,21 @@ public class StudentRepository : IStudentRepository
 
     public IEnumerable<Course> GetAllPurchases(string studentId)
     {
-        return _context.studentEnrollCourses
+        return _context.Purchases
                    .Where(ec => ec.StudentId == studentId)
                    .Select(ec => ec.Course)
                    .ToList();
     }
 
-    public void AddReview(string studentId, int courseId, string reviewText, int rating)
+    public void AddReview(ReviewedCourse reviewedCourse)
     {
         var review = new ReviewedCourse
         {
-            StudentId = studentId,
-            CourseId = courseId,
-            Comment = reviewText,
-            Rating = rating,
-            DateTime = DateTime.Now
+            StudentId = reviewedCourse.StudentId,
+            CourseId = reviewedCourse.CourseId,
+            Comment = reviewedCourse.Comment,
+            Rating = reviewedCourse.Rating,
+            DateTime = reviewedCourse.DateTime
         };
         _context.ReviewedCourses.Add(review);
         _context.SaveChanges();
@@ -206,13 +213,12 @@ public class StudentRepository : IStudentRepository
 
     public IEnumerable<ReviewedCourse> GetAllReviews(int courseId)
     {
-        return _context.ReviewedCourses.Where(r => r.CourseId == courseId).ToList();
+        return _context.ReviewedCourses.Where(r => r.CourseId == courseId).Include(s=>s.Student).ToList();
     }
 
-    public IEnumerable<Course> GetEnrolledCourses(string studentId)
+    public IEnumerable<StudentEnrollCourse> GetEnrolledCourses(string studentId)
     {
-        return _context.studentEnrollCourses.Where(sc => sc.StudentId == studentId)
-            .Select(sc => sc.Course).ToList();
+        return _context.studentEnrollCourses.Where(e => e.StudentId == studentId).Include(e => e.Course).ThenInclude(c=>c.Instructor).ToList();
     }
 
     public void EnrollInCourse(string studentId, int courseId)
@@ -287,27 +293,24 @@ public class StudentRepository : IStudentRepository
 
     public void AddToWishlist(string studentId, int courseId)
     {
-        if (!_context.WishList.Any(w => w.StudentId == studentId && w.WishedCourseId == courseId))
+        if (!_context.WishLists.Any(w => w.StudentId == studentId && w.WishedCourseId == courseId))
         {
-            _context.WishList.Add(new WishList { StudentId = studentId, WishedCourseId = courseId });
+            _context.WishLists.Add(new WishList { StudentId = studentId, WishedCourseId = courseId });
             _context.SaveChanges();
         }
     }
 
-    public IEnumerable<Course> GetWishlist(string studentId)
+    public IEnumerable<WishList> GetWishlist(string studentId)
     {
-        return _context.WishList
-                    .Where(w => w.StudentId == studentId)
-                    .Select(w => w.WishedCourse)
-                    .ToList();
+        return _context.WishLists.Where(w => w.StudentId == studentId).Include(w => w.WishedCourse).ThenInclude(c=>c.Instructor).ToList();
     }
 
     public void RemoveFromWishlist(string studentId, int courseId)
     {
-        var wishlistItem = _context.WishList.FirstOrDefault(w => w.StudentId == studentId && w.WishedCourseId == courseId);
+        var wishlistItem = _context.WishLists.FirstOrDefault(w => w.StudentId == studentId && w.WishedCourseId == courseId);
         if (wishlistItem != null)
         {
-            _context.WishList.Remove(wishlistItem);
+            _context.WishLists.Remove(wishlistItem);
             _context.SaveChanges();
         }
     }

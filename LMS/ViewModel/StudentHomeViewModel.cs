@@ -7,7 +7,7 @@ namespace LMS.ViewModel
     {
         public IEnumerable<Course> Courses { get; set; } = new List<Course>();
         public IEnumerable<Course> RecommendedCourses { get; set; } = new List<Course>();
-        public IEnumerable<Course> PurchasedCourses { get; set; } = new List<Course>();
+        public IEnumerable<StudentEnrollCourse> PurchasedCourses { get; set; } = new List<StudentEnrollCourse>();
         public Dictionary<int, double> CourseProgress { get; set; } = new Dictionary<int, double>(); // CourseId -> Progress
         
     }

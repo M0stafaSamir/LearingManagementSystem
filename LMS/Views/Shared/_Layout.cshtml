@@ -75,7 +75,21 @@
                     <li><a href="contact.html">Contact</a></li>
                     @if (SignInManager.IsSignedIn(User)) 
                     {
-                    <li><a href="#"><i class="fa-solid fa-heart fs-4 pe-1" style="color: #5fcf80;"></i>Whishlist</a></li>
+                        <li>
+                            <a asp-controller="Student" asp-action="Wishlist">
+                                <i class="fa-solid fa-heart fs-4 pe-1" style="color: #5fcf80;"></i> Wishlist
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Student" asp-action="EnrolledCourses">
+                                <i class="fa-solid fa-book fs-4 pe-1" style="color: #5fcf80;"></i> Enrolled Courses
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Student" asp-action="Certificates">
+                                <i class="fa-solid fa-certificate fs-4 pe-1" style="color: #5fcf80;"></i> Your Certificates
+                            </a>
+                        </li>
                     }
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>

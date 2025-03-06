@@ -1,0 +1,134 @@
+﻿@model IEnumerable<LMS.Models.StudentModels.WishList>
+<div class="alert alert-success">
+    @TempData["Message"]
+</div>
+<h2 class="wishlist-title">Your Wishlist</h2>
+
+<div class="wishlist-container">
+    @if (Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <div class="course-card">
+                <img src="@item.WishedCourse.Image" alt="@item.WishedCourse.Name" class="course-image" />
+                <div class="course-info">
+                    <h3><a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@item.WishedCourseId">@item.WishedCourse.Name</a></h3>
+                    <p>@item.WishedCourse.Description</p>
+                    <p>Price: @(item.WishedCourse.Price == 0 ? "Free" : "$" + item.WishedCourse.Price)</p>
+                    <p>Instructor: @item.WishedCourse.Instructor.Name</p>
+
+                    <div class="button-group">
+                        @if (item.WishedCourse.Price == 0)
+                        {
+                            <form method="post" asp-action="EnrollCourse" asp-controller="Student">
+                                <input type="hidden" name="courseId" value="@item.WishedCourseId" />
+                                <button type="submit" class="enroll-btn">Enroll Now</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="get" asp-action="PurchaseCourse" asp-controller="Student">
+                                <input type="hidden" name="courseId" value="@item.WishedCourseId" />
+                                <button type="submit" class="purchase-btn btn btn-success ">Purchase Now</button>
+                            </form>
+                        }
+
+                        <form method="post" asp-action="RemoveFromWishlist" asp-controller="Student">
+                            <input type="hidden" name="courseId" value="@item.WishedCourseId" />
+                            <button type="submit" class="remove-btn btn btn-danger">Remove From WishList</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="empty-message">Your wishlist is empty.</p>
+    }
+</div>
+
+<style>
+    .wishlist-title {
+        text-align: center;
+        color: #5fcf80;
+        margin-bottom: 20px;
+    }
+
+    .wishlist-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .course-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        background: #fff;
+    }
+
+    .course-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .course-info {
+        padding: 15px;
+    }
+
+        .course-info h3 a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .enroll-btn {
+        background-color: #5fcf80;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .purchase-btn {
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .remove-btn {
+        
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .enroll-btn:hover, .purchase-btn:hover, .remove-btn:hover {
+            opacity: 0.8;
+        }
+
+    .empty-message {
+        text-align: center;
+        font-size: 18px;
+        color: #888;
+        margin-top: 50px;
+    }
+
+</style>
