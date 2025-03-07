@@ -46,12 +46,12 @@ namespace LMS.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var course = await _courseRepository.GetCourseById(id);
-            var chapters = await _chapterRepository.GetChaptersByCourseId(id); 
+            var Chapters = await _chapterRepository.GetChaptersByCourseId(id); 
             if (course == null)
             {
                 return NotFound();
             }
-            ViewBag.chapters = chapters; 
+            ViewBag.chapters = Chapters; 
             return View(course);
         }
 

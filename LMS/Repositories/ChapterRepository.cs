@@ -34,7 +34,7 @@ namespace LMS.Repositories
         }
         public async Task<List<Chapter>> GetChaptersByCourseId(int courseId)
         {
-            return await _context.Chapter.Where(c => c.CourseID == courseId).ToListAsync(); 
+            return await _context.Chapter.Include(c=>c.Lessons).Where(c => c.CourseID == courseId).ToListAsync(); 
         }
         public async Task UpdateChapter(Chapter chapter)
         {

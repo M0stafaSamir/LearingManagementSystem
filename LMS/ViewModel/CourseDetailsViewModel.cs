@@ -10,5 +10,9 @@ namespace LMS.ViewModel
         public double Progress { get; set; }
         public IEnumerable<ReviewedCourse> Reviews { get; set; }
 
+        //added new
+        public  List<Chapter> Chapters { get; set; }
+
+
     }
 }
