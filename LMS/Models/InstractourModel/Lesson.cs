@@ -17,7 +17,12 @@ namespace LMS.Models.InstractourModel
 
         [Required]
         public string MediaLink { get; set; }
-        public bool IsDeleted { get; set; } = false; 
+        public bool IsDeleted { get; set; } = false;
+
+        //added bec its in db but not here
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
+
 
 
         [ForeignKey("Chapter")]

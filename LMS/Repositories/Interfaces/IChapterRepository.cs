@@ -6,7 +6,7 @@ namespace LMS.Repositories.Interfaces
     {
         //IEnumerable<Chapter> GetAllChapters();
         Task<Chapter> GetChapterById(int id);
-        Task AddChapter(Chapter chapter);
+        Task<int> AddChapter(Chapter chapter);
         Task UpdateChapter(Chapter chapter);
         Task DeleteChapter(int id);
         Task<List<Chapter>> GetChaptersByCourseId(int courseId);

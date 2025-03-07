@@ -12,10 +12,11 @@ namespace LMS.Repositories
         {
             _context = context;
         }
-        public async Task AddChapter(Chapter chapter)
+        public async Task<int> AddChapter(Chapter chapter)
         {
             _context.Add(chapter);
             await _context.SaveChangesAsync(); 
+            return chapter.ID;
         }
 
         public async Task DeleteChapter(int id)

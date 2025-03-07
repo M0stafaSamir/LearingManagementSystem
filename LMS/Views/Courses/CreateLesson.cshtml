@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
+                <input asp-for="Duration" type="time" class="form-control" />
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,7 +29,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="ChapterID" class="control-label"></label>
-                <select asp-for="ChapterID" class ="form-control" asp-items="ViewBag.ChapterID"></select>
+                @* <select asp-for="ChapterID" class ="form-control" asp-items="ViewBag.ChapterID"></select> *@
+                <input asp-for="ChapterID" value="@ViewBag.chapterId" class="form-control" />
+
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="CourseId" class="control-label"></label>
+                @* <select asp-for="ChapterID" class ="form-control" asp-items="ViewBag.ChapterID"></select> *@
+                <input asp-for="CourseId" value="@ViewBag.CourseId" class="form-control" />
+
+                
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

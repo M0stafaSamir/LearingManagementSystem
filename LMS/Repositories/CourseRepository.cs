@@ -127,7 +127,7 @@ namespace LMS.Repositories
             }
         }
 
-        public async Task CreateCourse(CreateCourseViewModel course, IFormFile Image, string InstID)
+        public async Task<int> CreateCourse(CreateCourseViewModel course, IFormFile Image, string InstID)
         {
             try
             {
@@ -152,23 +152,33 @@ namespace LMS.Repositories
 
                     course.Image = uniqueFileName;
                 }
-                _context.Add(new Course
+
+                var CreatedCourse = new Course
                 {
+
                     CategoryId = course.CategoryId,
                     Name = course.Name,
                     Description = course.Description,
                     Price = course.Price,
                     Image = course.Image,
                     InstructorId = InstID
-                });
+                };
+                _context.Add(CreatedCourse);
+                
                 await _context.SaveChangesAsync();
+
+                return CreatedCourse.Id;
             }
             catch(Exception ex)
             {
                 Console.WriteLine($"An error occurred while uploading the image: {ex.Message}");
-
+                return -1;
             }
+
+
          
         }
+
+   
     }
 }
