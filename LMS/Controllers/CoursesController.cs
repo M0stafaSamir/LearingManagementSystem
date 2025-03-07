@@ -100,7 +100,7 @@ namespace LMS.Controllers
                 var chapterId= await _chapterRepository.AddChapter(chapter); 
                 return RedirectToAction(nameof(CreateLesson), new { chId = chapterId });
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(CreateChapter), chapter);
         }
 
 
@@ -128,9 +128,9 @@ namespace LMS.Controllers
             {
                 //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 await _lessonRepository.AddLesson(lesson);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new {id=lesson.CourseId});
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(CreateLesson), lesson);
         }
 
 

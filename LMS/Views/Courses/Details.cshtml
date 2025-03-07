@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="container">
+<div class="container pb-5 pt-3">
 
 
     <h1>Details</h1>
@@ -82,7 +82,7 @@
  @* CHAPTERS *@
 </div>
     <div class="accordion" id="accordionExample">
-        <h3 class="fw-bold"><a asp-action="CreateChapter" asp-route-id="@Model?.Id" class="p-2 btn btn-outline-success rounded-2">+Add Chapter</a></h3>
+        <h3 class="fw-bold"><a asp-action="CreateChapter" asp-route-id="@Model?.Id" class="p-2 btn btn-outline-success rounded-2 fw-semibold"><i class="fa-solid fa-plus"></i> Add Chapter</a></h3>
         @foreach(var chapter in Model.Chapters){
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -118,6 +118,5 @@
 
 <div>
     
-    <a asp-action="Index">Back to List</a>
 </div>
 </div>

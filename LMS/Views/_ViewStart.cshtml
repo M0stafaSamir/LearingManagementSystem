@@ -3,14 +3,15 @@
 @inject UserManager<AppUser> UserManager
 
 @{
+    Layout = "_Layout";
+
     if (User.IsInRole("Instructor")){
+
         Layout = "_LayoutInstructor";
     }
     else if (User.IsInRole("Admin"))
     {
-
     Layout = "_LayoutAdmin";
     }
-    Layout = "_Layout";
 
 }

@@ -19,6 +19,10 @@ namespace LMS.Models.InstractourModel
         public string MediaLink { get; set; }
         public bool IsDeleted { get; set; } = false;
 
+        [NotMapped] 
+        public string DurationValue { get; set; }  
+
+
         //added bec its in db but not here
         public int CourseId { get; set; }
         public Course Course { get; set; }

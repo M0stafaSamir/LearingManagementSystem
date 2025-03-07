@@ -42,7 +42,7 @@
                 <!-- Uncomment the line below if you also wish to use an image logo -->
                 <!-- <img src="assets/img/logo.png" alt=""> -->
                 <h1 class="sitename">Mentor</h1>
-                <span class="pt-2">Ins</span>
+                <span class="pt-2" style="font-size:13px;">Instructor</span>
             </a>
 
 
@@ -50,6 +50,8 @@
                 <ul>
                     <li><a href="/" class="active">Home<br></a></li>
                     <li><a asp-controller="Courses" asp-action="Index">MyCourses</a></li>
+                    <li><a asp-controller="Courses" asp-action="PendingCourses">Pending Courses</a></li>
+
 
 
                     <li><a href="trainers.html">test</a></li>
@@ -115,14 +117,14 @@
 
 
     
-    <div class="container">
+    
         @RenderBody()
-    </div>
+   
   
 
 
 
-    <footer id="footer" class="footer position-relative light-background">
+    <footer id="footer" class="footer position-relative light-background pb-0">
 
         <div class="container footer-top">
             <div class="row gy-4">
@@ -180,7 +182,7 @@
             </div>
         </div>
 
-        <div class="container copyright text-center mt-4">
+        <div class=" copyright text-center mt-4">
             <p>© <span>Copyright</span> <strong class="px-1 sitename">Mentor</strong> <span>All Rights Reserved</span></p>
             <div class="credits">
                 <!-- All the links in the footer should remain intact. -->
