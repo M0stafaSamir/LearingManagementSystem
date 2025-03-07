@@ -105,8 +105,11 @@
                         <i class="fa-solid fa-user fs-5" style="color: #5fcf80;"></i>
                 </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item text-danger" href="/identity/account/login"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
-                        
+                        <li>
+                        <form class="form-inline dropdown-item " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                <button type="submit" class="nav-link btn btn-link text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                        </form>
+                        </li>
                     </ul>
                 </div>
        
