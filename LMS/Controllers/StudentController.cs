@@ -7,7 +7,10 @@ using LMS.Models.StudentModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-
+using Newtonsoft.Json;
+using System.Text;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 [Authorize]
 public class StudentController : Controller
@@ -72,12 +75,72 @@ public class StudentController : Controller
 
 
     [HttpPost]
-    public IActionResult PurchaseCourse(int courseId)
+    public async Task<IActionResult> PurchaseCourse(int courseId)
     {
         var course = _studentRepo.GetCourseDetails(courseId);
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+
         if (course == null) return NotFound();
-        //Payment logic and view
-        return View(course);
+
+
+        var intentionRequest = new
+        {
+            amount = (int)(course.Price *100) , 
+            currency = "EGP",
+            payment_methods = new[] { 4419883, 4437311, 4437297 },
+            items = new[]
+                {
+                    new
+                    {
+                        name = "Item name",
+                        amount = (int)(course.Price *100),
+                        description = "Item description",
+                        quantity = 1
+                    }
+                },
+              
+            billing_data = new
+            {
+                apartment = "dumy",
+                first_name = "Mohamed",
+                last_name = "Hany",
+                street = "dumy",
+                building = "dumy",
+                phone_number = "01007788997",
+                city = "dumy",
+                country = "dumy",
+                email = "habosa@habosa.com",
+                floor = "dumy",
+                state = "dumy"
+            },
+            extras = new
+            {
+                id = studentId
+            }
+            // Add "special_reference", "notification_url", and "redirection_url" if needed
+        };
+        var json = JsonConvert.SerializeObject(intentionRequest);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+        var url = "https://accept.paymob.com/v1/intention/";
+        using var client = new HttpClient();
+
+        // Add headers
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //client.DefaultRequestHeaders.Add("Authorization", "Token egy_sk_test_68ef89025e9a21df799c8de6e552495b278ed90f7416655c5528e35ebedd8c64");
+
+        var response = await client.PostAsync(url, data);
+        var result = await response.Content.ReadAsStringAsync();
+
+        // Parse the JSON response and extract the client_secret
+        var jsonResponse = JObject.Parse(result);
+        var clientSecret = jsonResponse["client_secret"].ToString();
+
+        var returnedUrl = "https://accept.paymob.com/unifiedcheckout/?publicKey=egy_pk_test_jrlnWL5oJX8IRTp9xpeHq5mmQhAMfXES&clientSecret=" + clientSecret; 
+
+        return Redirect(returnedUrl);
     }
 
     [HttpPost]
