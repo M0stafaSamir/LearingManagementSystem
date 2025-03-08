@@ -129,7 +129,7 @@ public class StudentController : Controller
         // Add headers
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //client.DefaultRequestHeaders.Add("Authorization", "Token egy_sk_test_68ef89025e9a21df799c8de6e552495b278ed90f7416655c5528e35ebedd8c64");
+        client.DefaultRequestHeaders.Add("Authorization", "Token egy_sk_test_68ef89025e9a21df799c8de6e552495b278ed90f7416655c5528e35ebedd8c64");
 
         var response = await client.PostAsync(url, data);
         var result = await response.Content.ReadAsStringAsync();
