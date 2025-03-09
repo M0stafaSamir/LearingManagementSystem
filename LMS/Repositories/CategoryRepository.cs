@@ -27,7 +27,14 @@ namespace LMS.Repositories
 
         public async Task<IEnumerable<Category>> GetAllCategories()
         {
-           return await _context.Categories.ToListAsync();
+            return await _context.Categories
+            .Include(cat => cat.Courses)
+            .ThenInclude(course => course.Chapters)  
+            .ThenInclude(chapter => chapter.Lessons)  
+            .Include(cat => cat.Courses)
+            .ThenInclude(course => course.Instructor)  
+            .ToListAsync();
+
         }
 
         public async Task<Category> GetCategoryById(int id)

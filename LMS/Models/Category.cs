@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LMS.Models.InstractourModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Models
 {
@@ -11,5 +12,8 @@ namespace LMS.Models
 
         [Required]
         public string Name { get; set; }
+
+        //added 
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }

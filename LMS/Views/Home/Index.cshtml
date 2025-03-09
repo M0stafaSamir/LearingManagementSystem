@@ -1,4 +1,9 @@
-﻿@{
+﻿@model IEnumerable<LMS.Models.Category>
+@{
+    var Categories = (List<Category>) Model;
+}
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,19 +11,187 @@
 <body class="index-page">
     <main class="main">
         <!-- Hero Section -->
-        <section id="hero" class="hero section dark-background">
+        <section id="hero" class="hero section dark-background " data-aos="fade-in">
 
             <img src="~/assets//img/hero-bg.jpg" alt="" >
 
             <div class="container">
-                <h2 >Learning Today,<br>Leading Tomorrow</h2>
-                <div class="d-flex mt-4" >
+                <h2 data-aos="fade-up" data-aos-delay="100">Learning Today,<br>Leading Tomorrow</h2>
+                <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
                     <a href="courses.html" class="btn-get-started">Get Started</a>
                 </div>
             </div>
 
+           
         </section>
         <!-- /Hero Section -->
+
+
+
+
+        <div class="container">
+            <!--Categories Section-->
+            <section id="CategoriesTabs" class="">
+
+                <h2 class="fw-bold">Explore Our Course</h2>
+        <p class="fs-5 ">All the skills you need in one place</p>
+
+
+                <ul class="nav nav-tabs mb-3" id="myTab0" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button data-mdb-tab-init
+                                class="nav-link active"
+                                id="tab-@Categories[0].Id"
+                                data-mdb-target="#home@(Categories[0].Id)"
+                                type="button"
+                                role="tab"
+                                aria-controls="home@(Categories[0].Id)"
+                                aria-selected="true">
+                            @Categories[0].Name
+                        </button>
+                    </li>
+
+                    @foreach (var category in Model.Skip(1))
+                    {
+                        <li class="nav-item" role="presentation">
+                            <button data-mdb-tab-init
+                                    class="nav-link"
+                                    id="tab-@category.Id"
+                                    data-mdb-target="#tab@(category.Id)"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="tab@(category.Id)"
+                                    aria-selected="false">
+                                @category.Name
+                            </button>
+                        </li>
+                    }
+                </ul>
+
+               <div class="tab-content" id="myTabContent0">
+                   <div class="tab-pane fade show active"
+                         id="home@(Categories[0].Id)"
+                         role="tabpanel"
+                         aria-labelledby="tab-@Categories[0].Id">
+                        
+
+                            <!-- Slider main container -->
+                            <div class="swiper">
+                                <!-- Additional required wrapper -->
+                                <div class="swiper-wrapper">
+                                    <!-- Slides -->
+                             
+                                    @foreach (var Course in Categories[0].Courses)
+                                    {
+
+                                        <div class="swiper-slide">
+
+                                        <partial name="_CourseCard" for="@Course"></partial>
+                                        </div>
+
+                                    }
+                                </div>
+                                <!-- If we need pagination -->
+                                <div class="swiper-pagination"></div>
+
+                                <!-- If we need navigation buttons -->
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+
+                            </div>
+                        <!-- Slider main container -->
+
+                    </div>
+
+                    @foreach (var category in Model.Skip(1))
+                    {
+                        <div class="tab-pane fade"
+                             id="tab@(category.Id)"
+                             role="tabpanel"
+                             aria-labelledby="tab-@category.Id">
+                            <!-- Slider main container -->
+                            <div class="swiper">
+                                <!-- Additional required wrapper -->
+                                <div class="swiper-wrapper">
+                                    <!-- Slides -->
+                                    @foreach (var Course in category.Courses)
+                                    {
+
+                                        <div class="swiper-slide">
+
+                                            <partial name="_CourseCard" for="@Course"></partial>
+                                        </div>
+
+                                    }
+                                </div>
+                                <!-- If we need pagination -->
+                                <div class="swiper-pagination"></div>
+
+                                <!-- If we need navigation buttons -->
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+
+                            </div>
+                            <!-- Slider main container -->
+                        </div>
+                    }
+                </div>
+
+
+
+              
+
+             
+         
+
+
+        </section>
+            <!--Categories Section-->
+        </div>
+        <!-- Counts Section -->
+        <section id="counts" class="section counts light-background">
+
+            <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="1232" data-purecounter-duration="1" class="purecounter"></span>
+                            <p>Students</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="64" data-purecounter-duration="1" class="purecounter"></span>
+                            <p>Courses</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="42" data-purecounter-duration="1" class="purecounter"></span>
+                            <p>Events</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="24" data-purecounter-duration="1" class="purecounter"></span>
+                            <p>Trainers</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                </div>
+
+            </div>
+
+        </section>
+        <!-- /Counts Section -->
+    
+
+
 
     </main>
 </body>
