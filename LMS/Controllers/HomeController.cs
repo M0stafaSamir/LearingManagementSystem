@@ -2,6 +2,7 @@ using System.Diagnostics;
 using LMS.Models;
 using LMS.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Controllers
@@ -13,17 +14,26 @@ namespace LMS.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ICategoryRepository _categoryRepo;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly ICourseRepository _courseRepo;
 
-     
+        
 
-        public HomeController(ILogger<HomeController> logger, ICategoryRepository categoryRepo)
+
+
+        public HomeController(ILogger<HomeController> logger, ICategoryRepository categoryRepo, UserManager<AppUser> userManager, ICourseRepository courseRepo)
         {
             _logger = logger;
             _categoryRepo = categoryRepo;
+            _userManager= userManager;
+            _courseRepo= courseRepo;
         }
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.StudentsCount = (await _userManager.GetUsersInRoleAsync("Student")).Count;
+            ViewBag.InstructorsCount = (await _userManager.GetUsersInRoleAsync("Instructor")).Count;
+            ViewBag.CoursesCount =  _courseRepo.GetCourseCount();
             return View(await _categoryRepo.GetAllCategories());
         }
 
