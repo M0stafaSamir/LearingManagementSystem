@@ -48,6 +48,17 @@ public class StudentController : Controller
         return View(model);
     }
 
+
+    public IActionResult PaymentSuccess(int amount_cents)
+    {
+        var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //var courses = _studentRepo.GetAllCourses(search, category);
+        
+
+        return View();
+    }
+
     [HttpPost]
     public IActionResult EnrollCourse(int courseId)
     {
