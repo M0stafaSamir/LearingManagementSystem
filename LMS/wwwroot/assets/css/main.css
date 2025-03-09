@@ -1887,3 +1887,21 @@ section,
 .starter-section {
   /* Add your styles here */
 }
+
+
+/*--------------------------------------------------------------
+# my css
+--------------------------------------------------------------*/
+.landing {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/assets/img/close-up-hand-writing.jpg);
+    
+    min-height: 40vh;
+    background-position: center;
+    background-size: cover;
+}
+.mainBgColor {
+    background-color: #5fcf80;
+}
+.mainColor {
+    color: #5fcf80;
+}

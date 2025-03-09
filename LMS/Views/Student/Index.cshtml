@@ -7,26 +7,31 @@
     </div>
 }
 
-@* Search Bar *@
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-4">
-            <input type="text" id="searchBox" class="form-control" placeholder="Search courses..." />
-        </div>
-        <div class="col-md-4">
-            <select id="categoryDropdown" class="form-select">
-                <option value="">All Categories</option>
-                @foreach (Category category in ViewBag.Categories)
-                {
-                    <option value="@category.Name">@category.Name</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-4">
-            <button class="btn btn-success w-100" onclick="searchCourses()">Search</button>
+<div class="landing position-relative">
+    @* Search Bar *@
+    <div class="position-absolute top-50 start-50 translate-middle p-3 rounded-3 mainBgColor">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" id="searchBox" class="form-control" placeholder="Search courses..." />
+            </div>
+            <div class="col-md-4">
+                <select id="categoryDropdown" class="form-select">
+                    <option value="">All Categories</option>
+                    @foreach (Category category in ViewBag.Categories)
+                    {
+                        <option value="@category.Name">@category.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-success w-100" onclick="searchCourses()">Search</button>
+            </div>
         </div>
     </div>
+
 </div>
+
+
 
 @* All Courses *@
 <h2 class="text-center m-5 text-success">All Courses</h2>
