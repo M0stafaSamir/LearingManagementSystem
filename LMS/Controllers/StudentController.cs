@@ -49,12 +49,16 @@ public class StudentController : Controller
     }
 
 
-    public IActionResult PaymentSuccess(int amount_cents)
+    public IActionResult PaymentSuccess(int Cid,int amount_cents,bool success)
     {
         var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+        Console.WriteLine(Cid) ;
+        Console.WriteLine(amount_cents);
+        Console.WriteLine(success);
+
         //var courses = _studentRepo.GetAllCourses(search, category);
-        
+
 
         return View();
     }
@@ -98,20 +102,20 @@ public class StudentController : Controller
 
         var intentionRequest = new
         {
-            amount = (int)(course.Price *100) , 
+            amount = (int)(course.Price * 100),
             currency = "EGP",
             payment_methods = new[] { 4419883, 4437311, 4437297 },
             items = new[]
                 {
-                    new
-                    {
-                        name = "Item name",
-                        amount = (int)(course.Price *100),
-                        description = "Item description",
-                        quantity = 1
-                    }
-                },
-              
+                new
+                {
+                    name = "Item name",
+                    amount = (int)(course.Price * 100),
+                    description = "Item description",
+                    quantity = 1
+                }
+            },
+
             billing_data = new
             {
                 apartment = "dumy",
@@ -129,7 +133,9 @@ public class StudentController : Controller
             extras = new
             {
                 id = studentId
-            }
+            },
+            redirection_url = $"https://lms.local:7181/Student/PaymentSuccess?Cid={courseId}"
+
             // Add "special_reference", "notification_url", and "redirection_url" if needed
         };
         var json = JsonConvert.SerializeObject(intentionRequest);
@@ -153,6 +159,7 @@ public class StudentController : Controller
 
         return Redirect(returnedUrl);
     }
+
 
     [HttpPost]
     public IActionResult AddToWishlist(int courseId)
