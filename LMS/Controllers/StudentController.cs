@@ -56,11 +56,11 @@ public class StudentController : Controller
         Console.WriteLine(Cid) ;
         Console.WriteLine(amount_cents);
         Console.WriteLine(success);
-
+        _studentRepo.PurchaseCourse( studentId,  Cid);
         //var courses = _studentRepo.GetAllCourses(search, category);
 
 
-        return View();
+        return RedirectToAction("Index");
     }
 
     [HttpPost]
@@ -134,7 +134,7 @@ public class StudentController : Controller
             {
                 id = studentId
             },
-            redirection_url = $"https://lms.local:7181/Student/PaymentSuccess?Cid={courseId}"
+            redirection_url = $"https://localhost:7181/Student/PaymentSuccess?Cid={courseId}"
 
             // Add "special_reference", "notification_url", and "redirection_url" if needed
         };

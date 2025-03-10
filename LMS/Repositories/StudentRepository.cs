@@ -51,6 +51,8 @@ public class StudentRepository : IStudentRepository
     public IEnumerable<Course> GetRecommendedCourses(string studentId)
     {
         var enrolledCategories = _context.studentEnrollCourses
+            .Where(s=>s.Course.IsAccepted==true)
+            .Where(s=>s.Course.IsDeleted==false)
             .Where(e => e.StudentId == studentId)
             .Select(e => e.Course.Category)
             .Distinct()
