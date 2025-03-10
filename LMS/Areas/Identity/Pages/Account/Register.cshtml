@@ -60,7 +60,26 @@
                                 <p>
                                     @foreach (var provider in Model.ExternalLogins!)
                                     {
-                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                        var iconClass = provider.Name switch
+                                        {
+                                            "Facebook" => "fa-brands fa-facebook",
+                                            "Google" => "fa-brands fa-google",
+                                            "Microsoft" => "fa-brands fa-microsoft",
+                                            _ => "fa-brands fa-user" // Default icon for unknown providers
+                                        };
+                                        var iconColor = provider.Name switch
+                                        {
+                                            "Facebook" => "#1877F2",  // Facebook Blue
+                                            "Google" => "#DB4437",    // Google Red
+                                            "Microsoft" => "#F25022", // Microsoft Orange
+                                            _ => "#6c757d"            // Default Gray
+                                        };
+
+
+                                        <button type="submit" class="btn btn-primary" style="background-color: @iconColor;" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                            <i class="@iconClass fa-lg fa-beat"></i> @provider.DisplayName
+                                        </button>
+
                                     }
                                 </p>
                             </div>

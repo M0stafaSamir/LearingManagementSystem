@@ -2,9 +2,12 @@ using LMS.Data;
 using LMS.Models;
 using LMS.Repositories;
 using LMS.Repositories.Interfaces;
+using LMS.services_for_authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using LMS.services_for_authentication;  ///trying forgetpass
 
 namespace LMS
 {
@@ -53,6 +56,12 @@ namespace LMS
                 
 
             });
+
+
+
+
+
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 
