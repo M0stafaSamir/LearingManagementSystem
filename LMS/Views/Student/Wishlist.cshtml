@@ -9,11 +9,11 @@
     {
         @foreach (var item in Model)
         {
-            <div class="course-card">
-                <img src="@item.WishedCourse.Image" alt="@item.WishedCourse.Name" class="course-image" />
-                <div class="course-info">
+            <div class="course-card d-flex flex-column">
+                <img src="~/images/courses/@item.WishedCourse.Image" alt="@item.WishedCourse.Name" class="course-image" />
+                <div class="course-info mt-auto">
                     <h3><a asp-action="CourseDetails" asp-controller="Student" asp-route-courseId="@item.WishedCourseId">@item.WishedCourse.Name</a></h3>
-                    <p>@item.WishedCourse.Description</p>
+                    <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">@item.WishedCourse.Description</p>
                     <p>Price: @(item.WishedCourse.Price == 0 ? "Free" : "$" + item.WishedCourse.Price)</p>
                     <p>Instructor: @item.WishedCourse.Instructor.Name</p>
 
