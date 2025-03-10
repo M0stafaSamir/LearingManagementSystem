@@ -16,7 +16,10 @@ public class StudentRepository : IStudentRepository
 
     public IEnumerable<Course> GetAllCourses(string search = "", string category = "")
     {
-        var query = _context.Courses.Include(c => c.Instructor);
+        var query = _context.Courses
+            .Where(c=>c.IsAccepted==true)
+            .Where(c=>c.IsDeleted==false)
+            .Include(c => c.Instructor);
 
         if (!string.IsNullOrEmpty(search))
         {

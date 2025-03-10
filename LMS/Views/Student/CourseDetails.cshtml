@@ -3,7 +3,7 @@
 <div class="container course-details-container">
     <div class="text-center">
         <h2 class="course-title">@Model.Course.Name</h2>
-        <img src="@Model.Course.Image" alt="@Model.Course.Name" class="course-image" />
+        <img src="~/images/courses/@Model.Course.Image" alt="@Model.Course.Name" class="course-image" />
         <p class="course-description">@Model.Course.Description</p>
         <p><strong>Instructor:</strong> @Model.Course.Instructor.Name</p>
         <p><strong>Price:</strong> @(Model.Course.Price == 0 ? "Free" : "$" + Model.Course.Price)</p>
