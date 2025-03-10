@@ -6,12 +6,58 @@
 }
 
 <div class="container">
-<h1>@ViewData["Title"]</h1>
-    <div class="row">
+@* <h1>@ViewData["Title"]</h1> *@
+    <div class="row justify-content-center align-items-center">
         <div class="col-md-4">
             <section>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                            <p>
+                                There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                    article
+                                    about setting up this ASP.NET application to support logging in via external services
+                                </a>.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div class="d-flex justify-content-around">
+                                    @foreach (var provider in Model.ExternalLogins!)
+                                    {
+                                        var iconClass = provider.Name switch
+                                        {
+                                            "Facebook" => "fa-brands fa-facebook",
+                                            "Google" => "fa-brands fa-google",
+                                            "Microsoft" => "fa-brands fa-microsoft",
+                                            _ => "fa-brands fa-user" // Default icon for unknown providers
+                                        };
+                                        var iconColor = provider.Name switch
+                                        {
+                                            "Facebook" => "#1877F2",  // Facebook Blue
+                                            "Google" => "#DB4437",    // Google Red
+                                            "Microsoft" => "#F25022", // Microsoft Orange
+                                            _ => "#6c757d"            // Default Gray
+                                        };
+
+
+                                        <button type="submit" class="btn btn-primary" style="background-color: @iconColor;" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                            <i class="@iconClass fa-lg fa-beat"></i> @provider.DisplayName
+                                        </button>
+
+                                    }
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+
+            <section>
                 <form id="account" method="post">
-                    <h2>Use a local account to log in.</h2>
                     <hr />
                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                     <div class="form-floating mb-3">
@@ -33,7 +79,7 @@
                     <div>
                         <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
                     </div>
-                    <div>
+                    <div class="my-3">
                         <p>
                             <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
                         </p>
@@ -47,57 +93,7 @@
                 </form>
             </section>
         </div>
-        <div class="col-md-6 col-md-offset-2">
-            <section>
-                <h3>Use another service to log in.</h3>
-                <hr />
-                @{
-                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                    {
-                        <div>
-                            <p>
-                                There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                    article
-                                    about setting up this ASP.NET application to support logging in via external services
-                                </a>.
-                            </p>
-                        </div>
-                    }
-                    else
-                    {
-                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                            <div>
-                                <p>
-                                    @foreach (var provider in Model.ExternalLogins!)
-                                    {
-                                        var iconClass = provider.Name switch
-                                        {
-                                            "Facebook" => "fa-brands fa-facebook" ,
-                                            "Google" => "fa-brands fa-google",
-                                            "Microsoft" => "fa-brands fa-microsoft",
-                                            _ => "fa-brands fa-user" // Default icon for unknown providers
-                                        };
-                                        var iconColor = provider.Name switch
-                                        {
-                                            "Facebook" => "#1877F2",  // Facebook Blue
-                                            "Google" => "#DB4437",    // Google Red
-                                            "Microsoft" => "#F25022", // Microsoft Orange
-                                            _ => "#6c757d"            // Default Gray
-                                        };
-
-
-                                        <button type="submit" class="btn btn-primary" style="background-color: @iconColor;" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                            <i class="@iconClass fa-lg fa-beat" ></i> @provider.DisplayName
-                                        </button>
-                                        
-                                    }
-                                </p>
-                            </div>
-                        </form>
-                    }
-                }
-            </section>
-        </div>
+    
     </div>
 </div>
 
