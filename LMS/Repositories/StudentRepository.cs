@@ -51,14 +51,14 @@ public class StudentRepository : IStudentRepository
     public IEnumerable<Course> GetRecommendedCourses(string studentId)
     {
         var enrolledCategories = _context.studentEnrollCourses
-            .Where(s=>s.Course.IsAccepted==true)
-            .Where(s=>s.Course.IsDeleted==false)
             .Where(e => e.StudentId == studentId)
             .Select(e => e.Course.Category)
             .Distinct()
             .ToList();
 
         return _context.Courses
+            .Where(s => s.IsAccepted == true)
+            .Where(s => s.IsDeleted == false)
             .Where(c => enrolledCategories.Contains(c.Category) && !c.StudentEnrollments.Any(e => e.StudentId == studentId)).Include(C=>C.Instructor)
             .ToList();
     }
