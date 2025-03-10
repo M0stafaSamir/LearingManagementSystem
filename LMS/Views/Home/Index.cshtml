@@ -83,12 +83,11 @@
                              
                                     @foreach (var Course in Categories[0].Courses)
                                     {
-
+                                        @if(Course.IsAccepted==true && Course.IsDeleted==false){
                                         <div class="swiper-slide">
-
-                                        <partial name="_CourseCard" for="@Course"></partial>
+                                            <partial name="_CourseCard" for="@Course"></partial>
                                         </div>
-
+                                        }
                                     }
                                 </div>
                                 <!-- If we need pagination -->

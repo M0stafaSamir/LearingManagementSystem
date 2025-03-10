@@ -64,37 +64,18 @@
 
             <a href="index.html" class="logo d-flex align-items-center ">
                 <!-- Uncomment the line below if you also wish to use an image logo -->
-                <!-- <img src="assets/img/logo.png" alt=""> -->
+                 <img src="~/assets/img/Book.svg" class="text-success" alt="">
                 <h1 class="sitename">Mentor</h1>
             </a>
 
 
             <nav id="navmenu" class="navmenu">
-                <ul>
+                <ul class="mr-auto">
                     <li><a href="/" class="active">Home<br></a></li>
 
                     <li><a asp-controller="Student" asp-action="Index">Courses</a></li>
-                    <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
-                    <li><a href="trainers.html">Trainers</a></li>
-                    @* <li class="dropdown"> *@
-                    @*     <a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a> *@
-                    @*     <ul> *@
-                    @*         <li><a href="#">Dropdown 1</a></li> *@
-                    @*         <li class="dropdown"> *@
-                    @*             <a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a> *@
-                    @*             <ul> *@
-                    @*                 <li><a href="#">Deep Dropdown 1</a></li> *@
-                    @*                 <li><a href="#">Deep Dropdown 2</a></li> *@
-                    @*                 <li><a href="#">Deep Dropdown 3</a></li> *@
-                    @*                 <li><a href="#">Deep Dropdown 4</a></li> *@
-                    @*                 <li><a href="#">Deep Dropdown 5</a></li> *@
-                    @*             </ul> *@
-                    @*         </li> *@
-                    @*         <li><a href="#">Dropdown 2</a></li> *@
-                    @*         <li><a href="#">Dropdown 3</a></li> *@
-                    @*         <li><a href="#">Dropdown 4</a></li> *@
-                    @*     </ul> *@
-                    @* </li> *@
+                    @* <li><a asp-controller="Categories" asp-action="Index">Categories</a></li> *@
+                    @* <li><a href="trainers.html">Trainers</a></li> *@
 
 
                     @if (SignInManager.IsSignedIn(User)) 
@@ -115,36 +96,39 @@
                             </a>
                         </li>
                     }
-                     
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle border border-0 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user fs-5" style="color: #5fcf80;"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <form class="form-inline dropdown-item " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                        <button type="submit" class="nav-link btn btn-link text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+
+                    }
+                    else
+                    {
+
+                        <li class="nav-item">
+                            <a class="nav-link ms-2" href="/identity/account/login">Log in</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ms-2" href="/identity/account/Register">Sign up</a>
+                        </li>
+
+                    }
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
             
-            @if (SignInManager.IsSignedIn(User)){
-
-
-
-                <div class="dropdown">
-                    <button class="btn dropdown-toggle border border-0 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-user fs-5" style="color: #5fcf80;"></i>
-                </button>
-                    <ul class="dropdown-menu">
-                        <li>
-                        <form class="form-inline dropdown-item " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                                <button type="submit" class="nav-link btn btn-link text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-                        </form>
-                        </li>
-                    </ul>
-                </div>
-
-            }else{
-
-                <div>
-                    <a class="btn-getstarted ms-2" href="/identity/account/login">Log in</a>
-                    <a class="btn-getstarted ms-2" href="/identity/account/Register">Sign up</a>
-                </div>
-           
-            }
+      
 
         </div>
     </header>

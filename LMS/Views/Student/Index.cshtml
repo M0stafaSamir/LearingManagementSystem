@@ -9,14 +9,14 @@
 
 <div class="landing position-relative">
     @* Search Bar *@
-    <div class="position-absolute top-50 start-50 translate-middle p-3 rounded-3 mainBgColor">
+    <div class="position-absolute top-50 start-50 translate-middle p-5 rounded-3 bg-light">
         <div class="row">
             <div class="col-md-4">
                 <input type="text" id="searchBox" class="form-control" placeholder="Search courses..." />
             </div>
             <div class="col-md-4">
-                <select id="categoryDropdown" class="form-select">
-                    <option value="">All Categories</option>
+                <select class="form-select" id="categoryDropdown">
+                    <option value="" selected>All Categories</option>
                     @foreach (Category category in ViewBag.Categories)
                     {
                         <option value="@category.Name">@category.Name</option>
@@ -24,7 +24,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <button class="btn btn-success w-100" onclick="searchCourses()">Search</button>
+                <button class="btn btn-outline-success w-100" onclick="searchCourses()">Search</button>
             </div>
         </div>
     </div>
