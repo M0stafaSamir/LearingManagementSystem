@@ -108,10 +108,30 @@
         }
         else
         {
+        
             <div class="card-footer d-flex justify-content-between bg-light">
-                <button class="btn btn-primary btn-sm">Enroll</button>
-                <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-heart"></i></button>
+
+            @if (@Model.Price == 0)
+            {
+                <form method="post" asp-action="EnrollCourse" asp-controller="Student">
+                    <input type="hidden" name="courseId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-primary btn-sm">Enroll Now</button>
+                </form>
+            }
+            else
+            {
+                <form method="post" asp-action="PurchaseCourse" asp-controller="Student">
+                    <input type="hidden" name="courseId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-primary btn-sm">Purchase</button>
+                </form>
+            }
+
+            <form method="post" asp-action="AddToWishlist" asp-controller="Student">
+                <input type="hidden" name="courseId" value="@Model.Id" />
+                <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="bi bi-heart"></i></button>
+            </form>
             </div>
+
         }
      } 
    
