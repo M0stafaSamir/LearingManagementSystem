@@ -2,32 +2,53 @@
 using LMS.Models.InstractourModel;
 using LMS.Repositories.Interfaces;
 using LMS.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Controllers
 {
-    
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ICourseRepository _courseRepo;
         private readonly IAdminRepository _adminRepo;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AdminController(ICourseRepository courseRepo, IAdminRepository adminRepo)
+        public AdminController(ICourseRepository courseRepo, IAdminRepository adminRepo, UserManager<AppUser> userManager)
         {
             _courseRepo= courseRepo;
             _adminRepo = adminRepo;
+            _userManager = userManager;
         }
 
         // GET: AdminController
+        [Route("Dashboard")]
         public ActionResult Index()
         {
             return View();
         }
 
+        public async Task<IActionResult> AllStudnts()
+        {
+            
+            return View(await _adminRepo.GetAllStudnts());
+        }
+        public async Task<IActionResult> AllInstructors()
+        {
+            
+            return View(await _adminRepo.GetAllInstructors());
+        }
+
+
         public async Task<IActionResult> PendingCourses()
         {
             return View(await _courseRepo.GetAllRequestedCourses());
+        }   
+        public async Task<IActionResult> RejectedCourses()
+        {
+            return View(await _courseRepo.GetAllRejectedCourses());
         }
 
         // GET: AdminController/PendingCourseDetails/5
@@ -44,6 +65,19 @@ namespace LMS.Controllers
             try
             {
                 await _courseRepo.AcceptCourse(Id);
+                return RedirectToAction("PendingCourses");
+            }
+            catch
+            {
+                return View("PendingCourseDetails", Id);
+            }
+        }     
+        [HttpPost]
+        public async Task<IActionResult> RejectPendingCourse(int Id)
+        {
+            try
+            {
+                await _courseRepo.DeleteCourse(Id);
                 return RedirectToAction("PendingCourses");
             }
             catch

@@ -8,6 +8,7 @@ namespace LMS.Repositories.Interfaces
         Task<IEnumerable<Course>> GetAllCourses();
         Task<IEnumerable<Course>> GetInstructorCourses(string Id);
         Task<IEnumerable<Course>> GetAllRequestedCourses();
+        Task<IEnumerable<Course>> GetAllRejectedCourses();
         Task<IEnumerable<Course>> SearchCourseByName(string name);
         Task<Course> GetCourseById(int id);
         Task AddCourse(Course course);
