@@ -75,7 +75,7 @@ namespace LMS.Areas.Identity.Pages.Account.Manage
             {
                 PhoneNumber = phoneNumber
             };
-            ViewData["ProfileImg"] = string.IsNullOrEmpty(user.ProfileImg) ? "/images/profiles/default.png" : user.ProfileImg;
+            ViewData["ProfileImg"] = string.IsNullOrEmpty(user.ProfileImg) ? Url.Content("~/assets/img/Avatar.jpg") : user.ProfileImg;
         }
 
         public async Task<IActionResult> OnGetAsync()
