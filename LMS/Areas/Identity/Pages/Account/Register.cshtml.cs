@@ -104,9 +104,11 @@ namespace LMS.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+
+            [Display(Name = "ProfileImg")]
+            public string ProfileImg { get; set; }
+
             
-
-
 
         }
 
