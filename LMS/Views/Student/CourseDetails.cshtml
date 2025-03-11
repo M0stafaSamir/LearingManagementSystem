@@ -43,7 +43,7 @@
             <div class="text-center mt-3">
                 @if (Model.IsEnrolled)
                 {
-                    <p><strong>Progress:</strong> @Model.Progress%</p>
+                     <p><strong>Progress:</strong> @Model.Progress.ToString("F0")%</p> 
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: @Model.Progress%;" aria-valuenow="@Model.Progress" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>

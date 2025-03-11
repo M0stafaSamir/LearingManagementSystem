@@ -58,7 +58,7 @@
                         <div class="mt-auto">
                             @if (isPurchased)
                             {
-                                <p class="text-success">Progress: @progress%</p>
+                                <p class="text-success">Progress: @progress.ToString("F0")%</p>
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar" style="width: @progress%;"
                                          aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="100">
