@@ -9,42 +9,127 @@
 else
 {
     <div class="container">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            @foreach (var certificate in Model)
-            {
-                <div class="col">
-                    <div class="card shadow-lg border-0 certificate-card">
-                        <div class="card-body text-center">
-                            <h5 class="card-title text-success fw-bold">@certificate.Course.Name</h5>
-                            <p class="text-muted">Awarded on: @certificate.AcquireDate.ToString("MMMM dd, yyyy")</p>
-                            <p class="fw-bold">Grade: <span class="text-primary">@certificate.Grade</span></p>
+        
+    
+        <div class="row justify-content-center align-items-center">
+            @foreach(var cert in Model){
+                <div class="certificate-container">
+                    <div class="certificate">
+                        <div class="water-mark-overlay"></div>
+                        <div class="certificate-header">
+                            <img src="~/assets/img/Book.svg" class="logo" alt="">
+                        </div>
+                        <div class="certificate-body">
+
+                            <p class="certificate-title"><strong>DIPLOMA AT @cert.Course.Name</strong></p>
+                            <h1>Certificate of Completion</h1>
+                            <p class="student-name">@cert.Student.Name</p>
+                            <div class="certificate-content">
+                                <div class="about-certificate">
+                                    <p>
+                                        has completed @cert.Course.TotalDuration Minutes on topic title here online on Date @cert.AcquireDate.ToString("MMMM dd, yyyy")
+                                    </p>
+                                </div>
+                                <p class="topic-title">
+                                    The Topic consists of @cert.Course.TotalDuration Continuity Minutes and includes the following:
+                                </p>
+                                <div class="text-center">
+                                    <p class="topic-description text-muted">@cert.Course.Description </p>
+                                </div>
+                            </div>
+                            <div class="certificate-footer text-muted">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Principal: <span class="link-underline-opacity-10-hover text-success">MENTOR</span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p>
+                                                    Accredited by : ITI
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>
+                                                    Endorsed by : <span>@cert.Course.Instructor.Name</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             }
         </div>
+        
     </div>
 }
 
 <style>
-    .certificate-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 10px;
-        padding: 20px;
-        border-left: 5px solid #28a745;
+    body {
+        font-family: Roboto;
     }
 
-        .certificate-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 8px 20px rgba(40, 167, 69, 0.2);
+    .certificate-container {
+        padding: 50px;
+        width: 1024px;
+    }
+
+    .certificate {
+        border: 20px solid #0C5280;
+        padding: 25px;
+        height: 600px;
+        position: relative;
+    }
+
+        .certificate:after {
+            content: '';
+            top: 0px;
+            left: 0px;
+            bottom: 0px;
+            right: 0px;
+            position: absolute;
+            /* background-image: url(); */
+            background-size: 100%;
+            z-index: -1;
         }
 
-    .text-success {
-        font-weight: bold;
+    .certificate-header > .logo {
+        width: 80px;
+        height: 80px;
     }
 
-    .text-primary {
-        font-size: 1.2rem;
-        font-weight: bold;
+    .certificate-title {
+        text-align: center;
+    }
+
+    .certificate-body {
+        text-align: center;
+    }
+
+    h1 {
+        font-weight: 400;
+        font-size: 48px;
+        color: #0C5280;
+    }
+
+    .student-name {
+        font-size: 24px;
+    }
+
+    .certificate-content {
+        margin: 0 auto;
+        width: 750px;
+    }
+
+    .about-certificate {
+        width: 380px;
+        margin: 0 auto;
+    }
+
+    .topic-description {
+        text-align: center;
     }
 </style>

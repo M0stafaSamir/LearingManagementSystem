@@ -16,7 +16,7 @@ public interface IStudentRepository
     // Certificate actions
     CertificateForStudent GetCertificateForCourse(string studentId, int courseId);
     bool CheckCourseCompletion(string studentId, int courseId);
-    IEnumerable<CertificateForStudent> GetAllCertificates(string studentId);
+    Task<IEnumerable<CertificateForStudent>> GetAllCertificates(string studentId);
 
     // Notes management
     void AddNoteToLesson(string studentId, int lessonId, string content);

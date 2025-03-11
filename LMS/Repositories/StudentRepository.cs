@@ -106,12 +106,15 @@ public class StudentRepository : IStudentRepository
         return false;
     }
 
-    public IEnumerable<CertificateForStudent> GetAllCertificates(string studentId)
+    public async Task<IEnumerable<CertificateForStudent>> GetAllCertificates(string studentId)
     {
-        return _context.Certificates
-                                   .Where(c => c.StudentId == studentId)
-                                   .Include(c => c.Course)
-                                   .ToList();
+        return await _context.Certificates
+                             .AsNoTracking()
+                             .Where(c => c.StudentId == studentId)
+                             .Include(c => c.Course)
+                             .Include(c=>c.Student)
+                             .Include(c => c.Course.Instructor)
+                             .ToListAsync();
     }
 
     public void AddNoteToLesson(string studentId, int lessonId, string content)

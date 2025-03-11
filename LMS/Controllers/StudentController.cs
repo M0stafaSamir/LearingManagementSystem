@@ -267,7 +267,7 @@ public class StudentController : Controller
         return View("AddReview", model); 
     }
 
-    public IActionResult Certificates()
+    public async Task<IActionResult> Certificates()
     {
         var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var enrolledCourses = _studentRepo.GetEnrolledCourses(studentId);
@@ -277,7 +277,7 @@ public class StudentController : Controller
             _studentRepo.CheckCourseCompletion(studentId, course.CourseId);
         }
 
-        var certificates = _studentRepo.GetAllCertificates(studentId);
+        var certificates = await _studentRepo.GetAllCertificates(studentId);
         return View(certificates);
     }
 
