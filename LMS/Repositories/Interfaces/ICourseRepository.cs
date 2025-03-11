@@ -1,5 +1,6 @@
 ﻿using LMS.Models.InstractourModel;
 using LMS.ViewModel.Inst;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Repositories.Interfaces
 {
@@ -21,7 +22,12 @@ namespace LMS.Repositories.Interfaces
         Task<int> CreateCourse(CreateCourseViewModel course, IFormFile Image,string InstID); 
         int GetCourseCount();
 
+        //new for admin charts
+        public IActionResult GetTopCourses();
 
-        
+
+
+
+
     }
 }

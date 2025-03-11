@@ -4,12 +4,14 @@ using LMS.Models.InstractourModel;
 using LMS.Repositories.Interfaces;
 using LMS.ViewModel.Inst;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
+
 namespace LMS.Repositories
 {
-    public class CourseRepository : ICourseRepository
+    public class CourseRepository : Controller, ICourseRepository //valid?
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment; 
@@ -186,6 +188,24 @@ namespace LMS.Repositories
                .Include(c => c.Instructor)
                .Where(c => c.IsDeleted == true)
                .ToListAsync();
+        }
+
+        //chart
+        public IActionResult GetTopCourses()
+        {
+            var topCourses = _context.studentEnrollCourses
+           .GroupBy(e => e.CourseId) 
+           .Select(group => new
+           {
+               CourseId = group.Key,
+               TotalStudents = group.Count() ,
+               CourseName= (_context.Courses.FirstOrDefault(c=>c.Id==group.Key)).Name,
+           })
+           .OrderByDescending(c => c.TotalStudents) 
+           .Take(6) 
+           .ToList();
+
+            return Json(topCourses); 
         }
     }
 }

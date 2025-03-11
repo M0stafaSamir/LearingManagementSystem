@@ -25,8 +25,12 @@ namespace LMS.Controllers
 
         // GET: AdminController
         [Route("Admin/Dashboard")]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            ViewBag.TotalCourses =  _courseRepo.GetCourseCount();
+            ViewBag.TotalStudents = (await _userManager.GetUsersInRoleAsync("Student")).Count();
+            ViewBag.TotalInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).Count();
+            ViewBag.TotalAdmins= (await _userManager.GetUsersInRoleAsync("Admin")).Count();
             return View();
         }
 
@@ -140,6 +144,15 @@ namespace LMS.Controllers
             {
                 return View("DeleteAdmin", Id);
             }
+        }
+
+
+
+        //Charts
+        public IActionResult GetChartData()
+        {
+            var data = _courseRepo.GetTopCourses();
+            return Json(data);
         }
 
     }
