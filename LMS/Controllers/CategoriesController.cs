@@ -10,9 +10,11 @@ using LMS.Models;
 //added
 using System.Security.Claims;
 using LMS.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
 
@@ -32,6 +34,7 @@ namespace LMS.Controllers
         }
 
         // GET: Categories
+        [Route("Admin/Catgories")]
         public async Task<IActionResult> Index()
         {
             string id = GetLoggedInUserId();//id

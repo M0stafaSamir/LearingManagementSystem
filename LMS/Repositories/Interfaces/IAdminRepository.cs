@@ -8,6 +8,8 @@ namespace LMS.Repositories.Interfaces
         Task AddAdminUser(CreateAdminViewModel adminUser);
         Task DeleteAdminUser(string Id);
         Task<IEnumerable<AppUser>> GetAllAdmins();
+        Task<IEnumerable<AppUser>> GetAllStudnts();
+        Task<IEnumerable<AppUser>> GetAllInstructors();
         Task<AppUser> GetAdminById(string Id);
     }
 }

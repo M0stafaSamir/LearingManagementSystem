@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LMS.Models.AppUser>
+
+@{
+    ViewData["Title"] = "AllStudnts";
+}
+<div class="container my-4 mx-2">
+
+
+<h1>All Students</h1>
+
+
+    <table class="table table-hover ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>     
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>   
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                Student
+            </td>
+            <td>
+                @* <a  asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
+                        <a asp-action="Details" class="btn btn-outline-info rounded-pill" asp-route-id="@item.Id">Details</a> 
+                        <a asp-action="Delete" class="btn btn-outline-danger rounded-pill" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>

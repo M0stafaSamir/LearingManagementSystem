@@ -62,5 +62,16 @@ namespace LMS.Repositories
             var Admins = await _userManager.GetUsersInRoleAsync("Admin");
             return Admins.ToList();
         }
+
+        public async Task<IEnumerable<AppUser>> GetAllStudnts()
+        {
+            var Students = await _userManager.GetUsersInRoleAsync("Student");
+            return Students.ToList();
+
+        }  public async Task<IEnumerable<AppUser>> GetAllInstructors()
+        {
+            var Instructors = await _userManager.GetUsersInRoleAsync("Instructor");
+            return Instructors.ToList();
+        }
     }
 }

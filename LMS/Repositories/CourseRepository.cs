@@ -29,7 +29,7 @@ namespace LMS.Repositories
             var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == id);
             if (course != null)
             {
-                _context.Courses.Remove(course);
+                course.IsDeleted=true;
                 await _context.SaveChangesAsync();
             }
         }
@@ -57,7 +57,7 @@ namespace LMS.Repositories
             return await _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.Instructor)
-                .Where(c => c.IsAccepted == false)
+                .Where(c => c.IsAccepted == false && c.IsDeleted==false)
                 .ToListAsync();
         }
         public async Task<Course> GetCourseById(int id)
@@ -179,6 +179,13 @@ namespace LMS.Repositories
          
         }
 
-   
+        public async Task<IEnumerable<Course>> GetAllRejectedCourses()
+        {
+            return await _context.Courses
+               .Include(c => c.Category)
+               .Include(c => c.Instructor)
+               .Where(c => c.IsDeleted == true)
+               .ToListAsync();
+        }
     }
 }
