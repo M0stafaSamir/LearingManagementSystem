@@ -4,29 +4,29 @@
 
     <div class="row justify-content-center align-items-start my-5">
 
-        <div class="col-md-6 course-content ">
+        <div class="col-md-6 course-content" id="lessons-section">
             <h3>Course Content</h3>
-            @foreach (var chapter in Model.Course.Chapters)
-            {
-                <div class="chapter">
-                    <h4>@chapter.Name</h4>
-                    <ul class="list-group">
-                        @foreach (var lesson in chapter.Lessons)
-                        {
-                            <li class="list-group-item">
-                                @if (Model.IsEnrolled)
-                                {
-                                    <a asp-action="LessonDetails" asp-controller="Student" asp-route-lessonId="@lesson.Id">@lesson.Name</a>
-                                }
-                                else
-                                {
-                                    <a href="#" onclick="alert('You must enroll in the course to access lessons.'); return false;">@lesson.Name</a>
-                                }
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="conatainer-box">
+                    <ul>
+                        @foreach(var chapterr in Model.Course.Chapters){
+                            <li class="section">
+                                <h4>@chapterr.Name</h4>
                             </li>
+                            @foreach (var lesson in chapterr.Lessons){
+                                <li class="lesson d-flex justify-content-between">
+                                    <div>
+                                        <p>@lesson.Chapter.Name : @lesson.Name</p>
+                                    </div>
+                                    <div>
+                                        <a asp-action="LessonDetails" asp-controller="Student" asp-route-lessonId="@lesson.Id" class="lessonLink">study the lesson</a>
+                                    </div>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
-            }
+            </div>
         </div>
 
         
@@ -34,7 +34,7 @@
             <div class="text-center">
                 <h2 class="course-title">@Model.Course.Name</h2>
                 <img src="~/images/courses/@Model.Course.Image" alt="@Model.Course.Name" class="course-image" />
-                <p class="course-description">@Model.Course.Description</p>
+                <p class="course-description text-muted fw-bolder">@Model.Course.Description</p>
                 <p><strong>Instructor:</strong> @Model.Course.Instructor.Name</p>
                 <p><strong>Price:</strong> @(Model.Course.Price == 0 ? "Free" : "$" + Model.Course.Price)</p>
                 <p><strong>Total Duration:</strong> @Model.Course.TotalDuration Minutes</p>
@@ -193,4 +193,70 @@
         .review-card p {
             margin-bottom: 5px;
         }
+</style>
+
+
+<style>
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .lessonLink {
+        font-weight: 600;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #3a8878;
+    }
+
+    .btnn:hover {
+        color: #3a8878;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    section {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+
+    #lessons-section .section {
+        background-color: #fff;
+        padding: 30px 15px;
+        border-bottom: 3px solid #e3e3e3;
+    }
+
+    #lessons-section .lesson {
+        background-color: #fafafa;
+        padding: 10px 15px;
+        border-bottom: 1px solid #e3e3e3;
+    }
+
+
+    #lessons-section .conatainer-box {
+        margin-top: 30px;
+        border: 1px solid #e3e3e3;
+        background-color: #fff;
+    }
+
+    #lessons-section .lesson:hover {
+        background: #3a8878;
+        color: #fff;
+    }
+
+        #lessons-section .lesson:hover a {
+            color: black;
+        }
+
+        #lessons-section .lesson a:hover {
+            color: yellowgreen;
+            font-weight: 900;
+        }
+    .conatainer-box p {
+        font-size: 18px;
+    }
 </style>

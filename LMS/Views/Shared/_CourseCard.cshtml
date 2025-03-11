@@ -3,72 +3,6 @@
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
-
-@{
-    // ViewData["Title"] = "_CardPartial";
-}
-
-@* <div> *@
-@*     <dl class="row justify-content-center align-items-center"> *@
-@*         <div class="card" style="width: 90%;"> *@
-@*             @if (!string.IsNullOrEmpty(@Model.Image)) *@
-@*             { *@
-@*                 <img src="~/images/courses/@Model.Image" class="img-fluid" /> *@
-@*             } *@
-@*             else *@
-@*             { *@
-@*                 <p>No image</p> *@
-@*             } *@
-@*             <div class="card-body"> *@
-@*                 <h5 class="card-title">@Model.Name</h5> *@
-@*                 <p class="card-text">@Model.Price</p><span> EGP</span> *@
-@*                 <p class="card-text">@Model.Description</p> *@
-@*             </div> *@
-@*         </div> *@
-@*     </dl> *@
-@* </div> *@
-
-
-@* <div class="course-item"> *@
-@*     <img src="~/images/courses/@Model.Image" class="img-fluid" alt="..."> *@
-@*     <div class="course-content">s *@
-@*         <div class="d-flex justify-content-between align-items-center mb-3"> *@
-@*             <p class="category">@Model.Category.Name</p> *@
-@*             <p class="price">@Model.Price EGP</p> *@
-@*         </div> *@
-
-@*             <h3><a href="Details/@Model.Id">@Model.Name</a></h3> *@
-@*         @* <p class="description">@Model.Description</p> *@ 
-@*         <div class="trainer d-flex justify-content-between align-items-center"> *@
-@*                 @if (User.IsInRole("Instructor")) *@
-@*                 { *@
-@*                     <div class="trainer-profile w-100 d-flex align-items-center justify-content-between"> *@
-@*                         <a asp-action="Edit" asp-route-id="@Model.Id"><i class="fa-solid fa-pen-to-square"></i> Edit</a>| *@
-@*                         <a asp-action="Details" asp-route-id="@Model.Id"><i class="fa-solid fa-gears"></i> Details</a>| *@
-@*                         <a asp-action="Delete" asp-route-id="@Model.Id"><i class="fa-solid fa-trash-can"></i> Delete</a> *@
-@*                     </div> *@
-
-@*                 } *@
-@*                 else *@
-@*                 { *@
-@*                     <div class="trainer-profile d-flex align-items-center"> *@
-
-@*                         @* <img src="assets/img/trainers/trainer-1-2.jpg" class="img-fluid" alt=""> *@ 
-@*                         <a href="" class="trainer-link">@Model.Instructor.Name</a> *@
-@*                     </div> *@
-@*                     <div class="trainer-rank d-flex align-items-center"> *@
-@*                         <i class="bi bi-person user-icon"></i>&nbsp;50 *@
-@*                         &nbsp;&nbsp; *@
-@*                         <i class="bi bi-heart heart-icon"></i>&nbsp;65 *@
-@*                     </div> *@
-@*                 } *@
-@*         </div> *@
-@*     </div> *@
-@* </div> *@
-
-
-
-
 <div class="card" style="max-width: 320px" >
 
     <img height="200" src="~/images/courses/@Model.Image" class="card-img-top object-fit-cover" alt="Product Image">
@@ -90,7 +24,7 @@
             </div>
         </div>
         <div class="mt-1">
-            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp" class="rounded-circle shadow-4"
+            <img src="~/assets/img/Avatar.jpg" class="rounded-circle shadow-4"
             style="width: 30px;" alt="Avatar" />
             <span class="ms-1">@Model.Instructor.Name</span>
         </div>
@@ -115,7 +49,7 @@
             {
                 <form method="post" asp-action="EnrollCourse" asp-controller="Student">
                     <input type="hidden" name="courseId" value="@Model.Id" />
-                    <button type="submit" class="btn btn-primary btn-sm">Enroll Now</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm">Enroll Now</button>
                 </form>
             }
             else
