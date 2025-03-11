@@ -60,7 +60,8 @@ namespace LMS.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-           
+            [Display(Name = "ProfileImg")]
+            public IFormFile ProfileImg { get; set; }
         }
 
         private async Task LoadAsync(AppUser user)
@@ -74,8 +75,7 @@ namespace LMS.Areas.Identity.Pages.Account.Manage
             {
                 PhoneNumber = phoneNumber
             };
-
-            
+            ViewData["ProfileImg"] = string.IsNullOrEmpty(user.ProfileImg) ? "/images/profiles/default.png" : user.ProfileImg;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -114,8 +114,28 @@ namespace LMS.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+            if (Input.ProfileImg != null)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
 
-          
+                // Generate unique file name
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.ProfileImg.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.ProfileImg.CopyToAsync(stream);
+                }
+
+                // Save relative path to user profile
+                user.ProfileImg = "/images/profiles/" + fileName;
+                await _userManager.UpdateAsync(user);
+            }
+
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

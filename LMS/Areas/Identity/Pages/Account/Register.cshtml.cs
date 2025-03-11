@@ -105,10 +105,9 @@ namespace LMS.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
 
-            [Display(Name = "ProfileImg")]
-            public string ProfileImg { get; set; }
-
-            
+            [Display(Name = "Profile Image")]
+            [BindProperty]
+            public IFormFile? ProfileImg { get; set; }
 
         }
 
@@ -132,8 +131,28 @@ namespace LMS.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
 
-               
+                if (Input.ProfileImg != null)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
 
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.ProfileImg.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Input.ProfileImg.CopyToAsync(stream);
+                    }
+
+                    user.ProfileImg = "/images/profiles/" + fileName;
+
+                    // 🔹 UPDATE the user after setting Profile Image
+                    await _userManager.UpdateAsync(user);
+                }
 
                 if (result.Succeeded)
                 {

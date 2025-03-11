@@ -1,9 +1,11 @@
 ﻿using LMS.Models.InstractourModel;
 using LMS.Models.StudentModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Models
 {
+    [Index(nameof(Email), IsUnique = true)]
     public class AppUser : IdentityUser
     {
         

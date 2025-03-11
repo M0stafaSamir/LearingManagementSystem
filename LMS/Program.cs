@@ -85,6 +85,8 @@ namespace LMS
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseStaticFiles();  //forprofileimage
+
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
