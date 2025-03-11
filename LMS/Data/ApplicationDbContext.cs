@@ -27,6 +27,7 @@ namespace LMS.Data
         public DbSet<AppUser> AppUsers { get; set; } 
         public DbSet<LMS.ViewModel.CreateAdminViewModel> CreateAdminViewModel { get; set; }
         public DbSet<WishList> WishLists { get; set; } 
+        public DbSet<LMS.ViewModel.UsersViewModel> UsersViewModel { get; set; }
 
     }
 }

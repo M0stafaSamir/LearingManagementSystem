@@ -105,6 +105,11 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
+                                    <form class="form-inline dropdown-item " asp-area="Identity" asp-page="/Account/Manage/PersonalData" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                        <button type="submit" class="nav-link btn btn-link text-info"><i class="fa-solid fa-info "></i> PersonalData</button>
+                                    </form>
+                                </li>
+                                <li>
                                     <form class="form-inline dropdown-item " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                                         <button type="submit" class="nav-link btn btn-link text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
                                     </form>
@@ -127,8 +132,7 @@
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
-            
-      
+             
 
         </div>
     </header>

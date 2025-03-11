@@ -12,7 +12,13 @@
     <div>
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="m-0">Course</h4>
-            <a asp-action="Edit" asp-route-id="@Model?.Id" class="fs-4"><i class="fa-solid fa-pen-to-square"></i> Edit Course</a>
+            @if(User.IsInRole("Admin")){
+                <a asp-action="PendingCourseDetails" asp-controller="Admin" asp-route-id="@Model?.Id" class="fs-4"><i class="fa-solid fa-pen-to-square"></i> Manage Course</a>
+
+            }else{
+
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="fs-4"><i class="fa-solid fa-pen-to-square"></i> Edit Course</a>
+            }
 
         </div>
         <hr />
@@ -58,11 +64,11 @@
                         }
                         else
                         {
-                        <span class="text-info"><i class="fa-solid fa-hourglass-half"></i> Pending</span>
+                            <span class="text-info"><i class="fa-solid fa-hourglass-half"></i> Pending</span>
                         }
 
                     </dd>
-               
+
                     <dt class="col-sm-3 col-md-4 col-lg-2">
                         @Html.DisplayNameFor(model => model.Category)
                     </dt>
@@ -76,13 +82,16 @@
                         @Html.DisplayFor(model => model.Instructor.Name)
                     </dd>
                 </dl>
+            </div>
         </div>
+
+        @* CHAPTERS *@
     </div>
-   
- @* CHAPTERS *@
-</div>
     <div class="accordion" id="accordionExample">
+        @if (User.IsInRole("Instructor")) 
+        { 
         <h3 class="fw-bold"><a asp-action="CreateChapter" asp-route-id="@Model?.Id" class="p-2 btn btn-outline-success rounded-2 fw-semibold"><i class="fa-solid fa-plus"></i> Add Chapter</a></h3>
+        }
         @foreach(var chapter in Model.Chapters){
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -92,7 +101,11 @@
                 </h2>
                 <div id="@chapter.ID" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <a asp-action="CreateLesson" asp-route-chId="@chapter.ID"><strong> +Add Lesson</strong></a>
+                        @if (User.IsInRole("Instructor")){
+
+
+                            <a asp-action="CreateLesson" asp-route-chId="@chapter.ID"><strong> +Add Lesson</strong></a>
+                        }
                         @foreach (var lesson in chapter.Lessons)
                         {
                             <hr />

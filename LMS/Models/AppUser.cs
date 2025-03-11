@@ -6,6 +6,7 @@ namespace LMS.Models
 {
     public class AppUser : IdentityUser
     {
+        
         public string Name { get; set; }
         public string ProfileImg { get; set; }
         public ICollection<StudentEnrollCourse> EnrolledCourses { get; set; } = new List<StudentEnrollCourse>();

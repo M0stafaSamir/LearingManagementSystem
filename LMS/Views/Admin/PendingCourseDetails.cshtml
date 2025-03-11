@@ -5,10 +5,10 @@
 }
 
 <div class="container">
-    <h1>PendingCourseDetails</h1>
+    <h1>Pending Course</h1>
 
     <div>
-        <h4>Course</h4>
+        <h4>Here You Can Accept or Reject The Course</h4>
         <hr />
         <dl class="row">
             <dt class="col-sm-2">
@@ -29,24 +29,7 @@
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Price)
             </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Image)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Image)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.IsAccepted)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.IsAccepted)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.IsDeleted)
-            </dd>
+        
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Category)
             </dt>
@@ -57,11 +40,11 @@
                 @Html.DisplayNameFor(model => model.Instructor)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Instructor.Id)
+                @Html.DisplayFor(model => model.Instructor.Name)
             </dd>
         </dl>
     </div>
-    <div>
+    <div class="d-flex gap-3">
         <form asp-action="AcceptPendingCourse">
             <input type="hidden" asp-for="Id" />
 
@@ -69,8 +52,15 @@
                 <input type="submit" value="Accept" class="btn btn-primary" />
             </div>
 
+        </form>    
+        <form asp-action="RejectPendingCourse">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="submit" value="Reject" class="btn btn-danger" />
+            </div>
+
         </form> 
-        <a asp-action="PendingCourses">Back to List</a>
+        @* <a asp-action="PendingCourses">Back to List</a> *@
     </div>
 
 </div>

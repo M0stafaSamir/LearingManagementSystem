@@ -3,11 +3,11 @@
 @{
     ViewData["Title"] = "AllAdmins";
 }
-<div class="container">
-<h1>AllAdmins</h1>
+<div class="container  my-4 mx-2">
+<h1>All Admins</h1>
 
 <p>
-        <a asp-action="CreateAdmin">Create New Admin</a>
+   <a asp-action="CreateAdmin">Create New Admin</a>
 </p>
 <table class="table">
     <thead>
@@ -19,6 +19,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
+            <th>Role</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -34,6 +36,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
+                <td>Admin</td>
             <td>
 
                         <a asp-action="DeleteAdmin" asp-route-id="@item.Id">Delete</a>
