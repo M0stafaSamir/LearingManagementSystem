@@ -24,7 +24,7 @@ namespace LMS.Controllers
         }
 
         // GET: AdminController
-        [Route("Dashboard")]
+        [Route("Admin/Dashboard")]
         public ActionResult Index()
         {
             return View();

@@ -23,11 +23,14 @@ namespace LMS.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<AppUser> _userManager;
 
-        public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger)
+
+        public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger, UserManager<AppUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager= userManager;
         }
 
         /// <summary>
@@ -107,6 +110,8 @@ namespace LMS.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
 
+            
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
@@ -117,7 +122,28 @@ namespace LMS.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                         var user = await _userManager.FindByEmailAsync(Input.Email);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains("Admin"))
+                {
+                    return LocalRedirect("~/Admin/Dashboard");
+                }
+                else if (roles.Contains("Student"))
+                {
+                    return LocalRedirect("~/");
+                }
+                //else if (roles.Contains("Instructor"))
+                //{
+                //    return LocalRedirect("~/");
+                //}
+                else
+                {
+                    return LocalRedirect(returnUrl); 
+                }
+            }
                 }
                 if (result.RequiresTwoFactor)
                 {
