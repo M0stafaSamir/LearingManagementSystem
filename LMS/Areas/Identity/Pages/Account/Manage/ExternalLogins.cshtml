@@ -3,6 +3,20 @@
 @{
     ViewData["Title"] = "Manage your external logins";
     ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
+    @functions {
+        public string GetLoginProviderIcon(string provider)
+        {
+            return provider.ToLower() switch
+            {
+                "google" => "fa-brands fa-google text-danger",
+                "facebook" => "fa-brands fa-facebook text-primary",
+                "twitter" => "fa-brands fa-twitter text-info",
+                "microsoft" => "fa-brands fa-microsoft text-secondary",
+                "github" => "fa-brands fa-github text-dark",
+                _ => "fa-solid fa-user text-muted" 
+            };
+        }
+    }
 }
 
 <partial name="_StatusMessage" for="StatusMessage" />
@@ -14,7 +28,9 @@
             @foreach (var login in Model.CurrentLogins)
             {
                 <tr>
-                    <td id="@($"login-provider-{login.LoginProvider}")">@login.ProviderDisplayName</td>
+                    <td id="@($"login-provider-{login.LoginProvider}")" class="fw-semibold text-capitalize">
+                        <i class="@GetLoginProviderIcon(login.LoginProvider) me-2"></i> @login.ProviderDisplayName
+                    </td>
                     <td>
                         @if (Model.ShowRemoveButton)
                         {
