@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace LMS.Controllers
 {
@@ -31,6 +32,15 @@ namespace LMS.Controllers
             ViewBag.TotalStudents = (await _userManager.GetUsersInRoleAsync("Student")).Count();
             ViewBag.TotalInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).Count();
             ViewBag.TotalAdmins= (await _userManager.GetUsersInRoleAsync("Admin")).Count();
+
+            string totalProf = _adminRepo.TotalProfits().ToString("C", new CultureInfo("en-EG"));
+            string netProf = (_adminRepo.TotalProfits() * 10/100).ToString("C", new CultureInfo("en-EG"));
+            
+            ViewBag.TotalProfits = totalProf;
+
+            ViewBag.netProfits = netProf;
+
+
             return View();
         }
 
@@ -104,7 +114,7 @@ namespace LMS.Controllers
         // GET: Create Admin Account
         public async Task<IActionResult> CreateAdmin()
         {
-                return View();
+                 return View();
         }
 
         // POST: Create Admin Account

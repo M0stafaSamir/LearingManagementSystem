@@ -5,79 +5,114 @@
 }
 
 <div class="container my-4 mx-2">
-<h1>PendingCourses</h1>
+<h1>Pending Courses</h1>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            @* <th> *@
-            @*     @Html.DisplayNameFor(model => model.Image) *@
-            @* </th> *@
-            <th>
-                Status
-            </th>
-          
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                    Instructor Name
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            @* <td> *@
-            @*     @Html.DisplayFor(modelItem => item.Image) *@
-            @* </td> *@
-            <td>
-                        @if (item.IsDeleted)
-                        {
-                            <span class="text-danger"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            DataTable Example
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Price)
+                        </th>
+                        @* <th> *@
+                        @*     @Html.DisplayNameFor(model => model.Image) *@
+                        @* </th> *@
+                        <th>
+                            Status
+                        </th>
 
-                        }
-                        else if (item.IsAccepted)
-                        {
-                            <span class="text-success"><i class="fa-solid fa-circle-check"></i> Accepted</span>
-                        }
-                        else
-                        {
-                            <span class="text-info"><i class="fa-solid fa-hourglass-half"></i> Pending</span>
-                        }
-            </td>
-        
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                        @Html.DisplayFor(modelItem => item.Instructor.Name)
-            </td>
-            <td>
-                        <a asp-action="Details" asp-controller="Courses" asp-route-id="@item.Id">View Course</a> 
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Category)
+                        </th>
+                        <th>
+                            Instructor Name
+                        </th>
+                        <th></th>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Price)
+                        </th>
+                        @* <th> *@
+                        @*     @Html.DisplayNameFor(model => model.Image) *@
+                        @* </th> *@
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Category)
+                        </th>
+                        <th>
+                            Instructor Name
+                        </th>
+                        <th></th>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+
+                            <td>
+                                @if (item.IsDeleted)
+                                {
+                                    <span class="text-danger"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>
+
+                                }
+                                else if (item.IsAccepted)
+                                {
+                                    <span class="text-success"><i class="fa-solid fa-circle-check"></i> Accepted</span>
+                                }
+                                else
+                                {
+                                    <span class="text-info"><i class="fa-solid fa-hourglass-half"></i> Pending</span>
+                                }
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Instructor.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-controller="Courses" asp-route-id="@item.Id" class="text-decoration-none text-primary"><i class="fa-solid fa-eye"></i> View Course</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+

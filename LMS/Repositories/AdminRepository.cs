@@ -73,5 +73,13 @@ namespace LMS.Repositories
             var Instructors = await _userManager.GetUsersInRoleAsync("Instructor");
             return Instructors.ToList();
         }
+
+        public decimal TotalProfits()
+        {
+            
+            return _context.Purchases.Sum(p => p.AmountPaid); ;
+        }
+
+    
     }
 }
