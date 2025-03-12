@@ -22,13 +22,22 @@
 
         </div>
         <hr />
-        <div class="row mb-4 g-5">
-            <div class=" col-md-6 col-lg-3">
+
+
+
+
+
+    </div>
+
+    <div class="row justify-content-center align-items-center">
+
+        <div class="col-md-8 mb-4 row justify-context-center align-items-center">
+            <div class=" col-md-4">
                 <div>
-                    <img  class=" w-100 object-fit-cover" src="~/images/courses/@Html.DisplayFor(model => model.Image)" alt="Alternate Text" />
+                    <img class=" w-100 object-fit-cover" src="~/images/courses/@Html.DisplayFor(model => model.Image)" alt="Alternate Text" />
                 </div>
             </div>
-            <div class=" col-md-6 col-lg-9">
+            <div class=" col-md-8">
                 <dl class="row">
                     <dt class="col-sm-3 col-md-4 col-lg-2">
                         @Html.DisplayNameFor(model => model.Name)
@@ -85,45 +94,44 @@
             </div>
         </div>
 
-        @* CHAPTERS *@
-    </div>
-    <div class="accordion" id="accordionExample">
-        @if (User.IsInRole("Instructor")) 
-        { 
-        <h3 class="fw-bold"><a asp-action="CreateChapter" asp-route-id="@Model?.Id" class="p-2 btn btn-outline-success rounded-2 fw-semibold"><i class="fa-solid fa-plus"></i> Add Chapter</a></h3>
-        }
-        @foreach(var chapter in Model.Chapters){
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed d-flex gx-5" type="button" data-bs-toggle="collapse" data-bs-target='#@chapter.ID' aria-expanded="true" aria-controls="@chapter.ID">
-                        <strong class="text-capitalize">@chapter.Name</strong>
-                    </button>
-                </h2>
-                <div id="@chapter.ID" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        @if (User.IsInRole("Instructor")){
 
+        <div class="col-md-4">
+            <h4 class="fw-bolder">
+                Course Content
+            </h4>
+            <div class="accordion" id="accordionExample">
+                @foreach (var chapter in Model.Chapters)
+                {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed d-flex gx-5" type="button" data-bs-toggle="collapse" data-bs-target='#@chapter.ID' aria-expanded="true" aria-controls="@chapter.ID">
+                                <strong class="text-capitalize">@chapter.Name</strong>
+                            </button>
+                        </h2>
+                        <div id="@chapter.ID" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                @foreach (var lesson in chapter.Lessons)
+                                {
+                                    <hr />
+                                    <div>
+                                        <span class="text-primary">@lesson.Name</span>
 
-                            <a asp-action="CreateLesson" asp-route-chId="@chapter.ID"><strong> +Add Lesson</strong></a>
-                        }
-                        @foreach (var lesson in chapter.Lessons)
-                        {
-                            <hr />
-                            <div>
-                                <span class="text-primary">@lesson.Name</span>
+                                    </div>
+                                }
 
                             </div>
-                        }
-                                     
+                        </div>
                     </div>
-                </div>
+
+                }
+
             </div>
 
-        }
+        </div>
 
-     
-        
+
     </div>
+
     @* CHAPTERS *@
 
 
