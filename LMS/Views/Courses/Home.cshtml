@@ -1,22 +1,55 @@
 ﻿@model IEnumerable<LMS.ViewModel.Inst.CourseIncomeViewModel>
 @{
-    dynamic instIncome = ViewBag.instIncome ; 
+    dynamic instIncome = ViewBag.instIncome ;
+
+    dynamic MentorService = instIncome.TotalIncome * 10 / 100;
+    dynamic TotalProfits = instIncome.TotalIncome - MentorService;
+
 }
-<h1>Home</h1>
 
-<p>
-    <a href="@Url.Action("Create")">Create New</a>
-</p>
 
-<div>
+
+<div class="py-3">
     <h3>Instructor Overview</h3>
     @if (instIncome != null)
     {
-        <p><strong>Instructor ID:</strong> @instIncome.InstID</p>
-        <p><strong>Instructor Name:</strong> @instIncome.InstName</p>
-        <p><strong>Total Courses:</strong> @instIncome.CoursesCount</p>
-        <p><strong>Total Students:</strong> @instIncome.StudentsCount</p>
-        <p><strong>Total Income:</strong> @instIncome.TotalIncome</p>
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="d-flex gap-2 align-items-center">
+                    <img width="80" height="80" class="rounded-circle" src="@ViewBag.ProfilImg" alt="Trainer">
+                    <strong class="fs-4">@instIncome.InstName</strong>
+                </div>
+
+                <p><strong>ID: </strong><span class="text-black-50">@instIncome.InstID</span> </p>
+                <div class="mt-4">
+                    <p><strong><i class="fa-solid fa-book-open"></i> Total Courses:</strong> @instIncome.CoursesCount</p>
+                    <p><strong><i class="fa-solid fa-people-line"></i> Total Students:</strong> @instIncome.StudentsCount</p>
+                </div>
+
+            </div>
+            <div class="col-lg-7 d-flex gap-5 justify-content-between">
+                <div>
+                <p><strong>Budget:</strong></p>
+                    <p class="text-success fs-3">+ @instIncome.TotalIncome EGP</p>
+
+                </div>
+                <div>
+                    <p><strong>Mentor Service </strong></p>
+                    <p class="text-danger fs-3">- @MentorService EGP</p>
+
+                </div>
+                <div>
+                    <p><strong>Total Earnings:</strong></p>
+                    <p class="text-success fs-3">+ @TotalProfits EGP</p>
+
+                </div>
+
+
+            </div>
+        </div>
+     
+
+       
     }
     else
     {
@@ -25,31 +58,56 @@
         </div>
     }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Course Name</th>
-            <th>Amount</th>
-            <th>Students Count</th>
-            <th>Category</th>
-            <th>Instructor</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.CourseName</td> 
-                <td>@item.Amount</td> 
-                <td>@item.StudentsCount</td> 
-                <td>@item.CategoryName</td> 
-                <td>@item.InstructorName</td>
-                <td>
-                    <a href="@Url.Action("Edit", new { id = item.courseID })">Edit</a> |
-                    <a href="@Url.Action("Details", new { id = item.courseID })">Details</a> |
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card mb-4 shadow">
+        <div class="card-header d-flex justify-content-between">
+            <span>
+
+            <i class="fas fa-table me-1"></i>
+            My Courses 
+            </span>
+
+            <span class="fw-bold"> <a href="@Url.Action("Create")">+ Create New Course</a></span>
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Amount</th>
+                        <th>Students Count</th>
+                        <th>Category</th>
+                        <th>Instructor</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Amount</th>
+                        <th>Students Count</th>
+                        <th>Category</th>
+                        <th>Instructor</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.CourseName</td>
+                            <td>@item.Amount</td>
+                            <td>@item.StudentsCount</td>
+                            <td>@item.CategoryName</td>
+                            <td>@item.InstructorName</td>
+                            <td>
+                                <a href="@Url.Action("Edit", new { id = item.courseID })" class="fw-bold"><i class="fa-solid fa-pen-to-square"></i> Edit</a> |
+                                <a href="@Url.Action("Details", new { id = item.courseID })" class="fw-bold"><i class="fa-solid fa-eye"></i> Details</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>

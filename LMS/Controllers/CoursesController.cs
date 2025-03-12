@@ -10,6 +10,8 @@ using LMS.Models.InstractourModel;
 using LMS.Repositories.Interfaces;
 using System.Security.Claims;
 using LMS.ViewModel.Inst;
+using LMS.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace LMS.Controllers
 {
@@ -18,22 +20,29 @@ namespace LMS.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ICourseRepository _courseRepository;
         private readonly IChapterRepository _chapterRepository;
-        private readonly ILessonRepository _lessonRepository; 
+        private readonly ILessonRepository _lessonRepository;
+        private readonly UserManager<AppUser> _userManager;
+
 
         public CoursesController(ApplicationDbContext context
             ,ICourseRepository courseRepository
             , IChapterRepository chapterRepository
-            , ILessonRepository lessonRepository)
+            , ILessonRepository lessonRepository,
+            UserManager<AppUser> userManager
+            )
         {
             _context = context;
             _courseRepository = courseRepository;
             _chapterRepository = chapterRepository;
-            _lessonRepository = lessonRepository; 
+            _lessonRepository = lessonRepository;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Home()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var Instructor = await _userManager.FindByIdAsync(userId);
 
             if (userId == null)
             {
@@ -42,6 +51,8 @@ namespace LMS.Controllers
             var instIncome = await _courseRepository.GetInstructorCoursesProfit(userId); 
             var courses = await _courseRepository.GetCoursesProfit(userId);
             ViewBag.instIncome = instIncome; 
+
+            ViewBag.ProfilImg = Instructor.ProfileImg;
             return View(courses);
         }
 
