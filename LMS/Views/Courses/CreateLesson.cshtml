@@ -16,6 +16,7 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Duration" class="control-label"></label>
                 <input asp-for="Duration" type="time" class="form-control" />
@@ -48,6 +49,14 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    const rangeInput = document.getElementById('duration');
+    const rangeValue = document.getElementById('rangeValue');
+    rangeInput.addEventListener('input', function() {
+        rangeValue.textContent = rangeInput.value;  
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
