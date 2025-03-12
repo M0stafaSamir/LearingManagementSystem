@@ -16,6 +16,7 @@ namespace LMS.Controllers
         private readonly ICourseRepository _courseRepo;
         private readonly IAdminRepository _adminRepo;
         private readonly UserManager<AppUser> _userManager;
+        
 
         public AdminController(ICourseRepository courseRepo, IAdminRepository adminRepo, UserManager<AppUser> userManager)
         {
@@ -164,6 +165,13 @@ namespace LMS.Controllers
             var data = _courseRepo.GetTopCourses();
             return Json(data);
         }
+
+
+        public async Task<IActionResult> UserDetails(string Id)
+        {
+            return View(await _adminRepo.GetUserDetails(Id));
+        }
+
 
     }
 }

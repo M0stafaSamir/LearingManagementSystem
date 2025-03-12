@@ -80,6 +80,10 @@ namespace LMS.Repositories
             return _context.Purchases.Sum(p => p.AmountPaid); ;
         }
 
-    
+        public async Task<AppUser> GetUserDetails(string Id)
+        {
+            return await _context.AppUsers.FirstOrDefaultAsync(u=>u.Id==Id);
+
+        }
     }
 }

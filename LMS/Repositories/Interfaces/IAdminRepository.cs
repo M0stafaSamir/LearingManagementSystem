@@ -12,6 +12,8 @@ namespace LMS.Repositories.Interfaces
         Task<IEnumerable<AppUser>> GetAllInstructors();
         Task<AppUser> GetAdminById(string Id);
 
+        Task<AppUser> GetUserDetails(string Id);
+
         decimal TotalProfits();
     }
 }

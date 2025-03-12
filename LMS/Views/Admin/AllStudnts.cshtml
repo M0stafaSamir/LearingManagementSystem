@@ -51,8 +51,8 @@
                             </td>
                             <td>
                                 @* <a  asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
-                                <a asp-action="Details" asp-controller="Student" class="text-primary fw-bold text-decoration-none" asp-route-id="@item.Id"><i class="fa-solid fa-eye"></i> Details</a> |
-                                <a asp-action="Delete" asp-controller="Student" class="fw-bold text-decoration-none text-danger" asp-route-id="@item.Id"><i class="fa-solid fa-trash-can"></i> Delete</a>
+                                <a asp-action="UserDetails" asp-controller="Admin" class="text-primary fw-bold text-decoration-none" asp-route-id="@item.Id"><i class="fa-solid fa-eye"></i> Details</a> |
+                                <a asp-action="DeleteAdmin" asp-controller="Admin" class="fw-bold text-decoration-none text-danger" asp-route-id="@item.Id"><i class="fa-solid fa-trash-can"></i> Delete</a>
                             </td>
                         </tr>
                     }
