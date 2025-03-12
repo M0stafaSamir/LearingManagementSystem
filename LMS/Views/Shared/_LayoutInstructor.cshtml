@@ -77,7 +77,7 @@
             {
 
                 var user = await UserManager.GetUserAsync(User);
-                var profileImage = user?.ProfileImg ?? Url.Content("~/assets/img/Avatar.jpg"); // Default image if none is set
+                var profileImage = user?.ProfileImg ?? Url.Content("~/assets/img/Avatar.jpg"); 
 
                 <div class="dropdown">
                     <button class="dropdown-toggle border border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
