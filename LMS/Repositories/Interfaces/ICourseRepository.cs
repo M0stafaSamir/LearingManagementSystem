@@ -19,7 +19,10 @@ namespace LMS.Repositories.Interfaces
         Task<IEnumerable<Course>> GetCoursesByCategoryId(int categoryId);
         Task<IEnumerable<Course>> GetCoursesByInstructorId(string instructorId);
         Task<IEnumerable<Course>> GetRequestedCoursesByInstructorId(string instructorId);
-        Task<int> CreateCourse(CreateCourseViewModel course, IFormFile Image,string InstID); 
+        Task<int> CreateCourse(CreateCourseViewModel course, IFormFile Image,string InstID);
+        Task<IEnumerable<CourseIncomeViewModel>> GetCoursesProfit(string instructorId);
+        public  Task<InstructorIncomeViewModel> GetInstructorCoursesProfit(string instructorId); 
+
         int GetCourseCount();
 
         //new for admin charts

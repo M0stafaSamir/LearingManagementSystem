@@ -238,5 +238,54 @@ namespace LMS.Repositories
 
             return Json(topCourses); 
         }
+
+        public async Task<IEnumerable<CourseIncomeViewModel>> GetCoursesProfit(string instructorId)
+        {
+            return await _context.Courses
+                .Where(c => c.InstructorId == instructorId)
+                .Include(c=>c.Category)
+                .Include(c=> c.Instructor)
+                .Select(c => new CourseIncomeViewModel
+                {
+                    courseID = c.Id,  
+                    CourseName = c.Name,  
+                    Amount = c.Purchases.Sum(p => p.AmountPaid), 
+                    StudentsCount = c.StudentEnrollments.Count(),
+                    CategoryName = c.Category.Name,
+                    InstructorName = c.Instructor.Name,
+                })
+                .ToListAsync();
+        }
+
+
+
+        public async Task<InstructorIncomeViewModel> GetInstructorCoursesProfit(string instructorId)
+        {
+            var courses = await _context.Courses
+                                       .Where(c => c.InstructorId == instructorId)
+                                       .Include(c => c.Purchases) 
+                                       .Include(c => c.StudentEnrollments) 
+                                       .ToListAsync();
+            var totalIncome = courses.Sum(c => c.Purchases.Sum(p => p.AmountPaid)); 
+            var coursesCount = courses.Count(); 
+            var studentsCount = courses.Sum(c => c.StudentEnrollments.Count());
+            var instructorIncome = await _context.Courses
+                .Where(c => c.InstructorId == instructorId)
+                .Include(c => c.Purchases) 
+                .Include(c => c.StudentEnrollments)
+                .Select(c => new InstructorIncomeViewModel
+                {
+                    InstID = instructorId,
+                    InstName = c.Instructor.Name,
+                    CoursesCount = coursesCount,                  
+                    TotalIncome = totalIncome,
+                    StudentsCount = studentsCount
+                })
+                .FirstOrDefaultAsync(); 
+
+            return instructorIncome;
+        }
+
+
     }
 }

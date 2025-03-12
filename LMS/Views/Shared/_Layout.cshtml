@@ -72,7 +72,7 @@
             <nav id="navmenu" class="navmenu">
                 <ul class="mr-auto">
                     <li><a href="/" class="active">Home<br></a></li>
-                    <li><a asp-controller="Home" asp-action="About" class="active">About us</a></li>
+                    <li><a asp-controller="Home" asp-action="About">About us</a></li>
 
                     <li><a asp-controller="Student" asp-action="Index">Courses</a></li>
                     @* <li><a asp-controller="Categories" asp-action="Index">Categories</a></li> *@
@@ -103,7 +103,7 @@
                         var profileImage = user?.ProfileImg ?? Url.Content("~/assets/img/Avatar.jpg"); // Default image if none is set
 
                         <div class="dropdown">
-                            <button class="btn dropdown-toggle border border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="dropdown-toggle border border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="@profileImage" alt="Profile Image" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
                             </button>
                             
@@ -141,11 +141,7 @@
         </div>
     </header>
 
-
-
         @RenderBody()
- 
-  
 
     <footer id="footer" class="footer position-relative light-background">
 

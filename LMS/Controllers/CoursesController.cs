@@ -30,6 +30,23 @@ namespace LMS.Controllers
             _chapterRepository = chapterRepository;
             _lessonRepository = lessonRepository; 
         }
+
+        public async Task<IActionResult> Home()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var instIncome = await _courseRepository.GetInstructorCoursesProfit(userId); 
+            var courses = await _courseRepository.GetCoursesProfit(userId);
+            ViewBag.instIncome = instIncome; 
+            return View(courses);
+        }
+
+
+
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
