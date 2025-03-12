@@ -285,7 +285,5 @@ namespace LMS.Repositories
 
             return instructorIncome;
         }
-
-
     }
 }
