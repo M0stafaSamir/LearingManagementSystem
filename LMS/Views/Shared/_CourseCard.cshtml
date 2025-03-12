@@ -4,7 +4,7 @@
 @inject UserManager<AppUser> UserManager
 @{
     var user = await UserManager.GetUserAsync(User);
-    var profileImage = user?.ProfileImg ?? Url.Content("~/assets/img/Avatar.jpg");
+    var profileImage = @Model.Instructor.ProfileImg ?? Url.Content("~/assets/img/Avatar.jpg");
     bool isPurchased = user?.Purchases?.Any(c => c.CourseId == Model.Id) ?? false;
         
 }
