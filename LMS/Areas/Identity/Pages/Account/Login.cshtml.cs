@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using LMS.Models.InstractourModel;
 
 namespace LMS.Areas.Identity.Pages.Account
 {
@@ -135,11 +136,11 @@ namespace LMS.Areas.Identity.Pages.Account
                 {
                     return LocalRedirect("~/");
                 }
-                //else if (roles.Contains("Instructor"))
-                //{
-                //    return LocalRedirect("~/");
-                //}
-                else
+                        else if (roles.Contains("Instructor"))
+                        {
+                            return LocalRedirect("~/Courses/Home");
+                        }
+                        else
                 {
                     return LocalRedirect(returnUrl); 
                 }
