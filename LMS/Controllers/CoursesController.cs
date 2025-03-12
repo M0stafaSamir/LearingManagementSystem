@@ -109,12 +109,6 @@ namespace LMS.Controllers
         //continue
         public async Task<IActionResult> CreateLesson(int chId)
         {
-            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            //var courses = await _courseRepository.GetInstructorCourses(userId);
-            ////var chapters = await _chapterRepository.GetChaptersByCourseId(CourseID);
-            //ViewBag.Courses = courses; 
-            //ViewData["CourseID"] = new SelectList(courses, "Id", "Name");
-            //ViewData["CourseID"] = new SelectList(courses, "Id", "Name");
             ViewBag.chapterId= chId;
             var Chapter= await _chapterRepository.GetChapterById(chId);
             ViewBag.CourseId = Chapter.CourseID;
@@ -217,6 +211,39 @@ namespace LMS.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> DeleteChapter(int id)
+        {
+
+            var chapter  = await _chapterRepository.GetChapterById(id);
+            var courseid = chapter!=null ? chapter.CourseID : -1 ;
+            if (chapter != null)
+            {
+                await _chapterRepository.DeleteChapter(id);
+            }
+            else
+            {
+                return NotFound(); 
+            }
+            return RedirectToAction("Edit", new { id = courseid });
+        }
+
+        public async Task<IActionResult> DeleteLesson(int id)
+        {
+            var lesson = await _lessonRepository.GetLessonByID(id); 
+            var chapterId = lesson!=null ? lesson.CourseId : -1;
+            if (lesson != null)
+            {
+                await _lessonRepository.DeleteLessonByID(id);
+            }
+            else
+            {
+                return NotFound(); 
+            }
+
+            return RedirectToAction("Edit", new { id = chapterId });   
         }
 
         private bool CourseExists(int id)

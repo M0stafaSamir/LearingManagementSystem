@@ -77,24 +77,31 @@
             {
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed d-flex gx-5" type="button" data-bs-toggle="collapse" data-bs-target='#@chapter.ID' aria-expanded="true" aria-controls="@chapter.ID">
-                            <strong class="text-capitalize">@chapter.Name</strong>
-                        </button>
+                        <div class="row">
+                            <button class="col-md-8 accordion-button collapsed d-flex gx-5" type="button" data-bs-toggle="collapse" data-bs-target='#@chapter.ID' aria-expanded="true" aria-controls="@chapter.ID">
+                                <strong class="text-capitalize">@chapter.Name</strong>
+                                <span>
+                                    <a asp-action="DeleteChapter" asp-route-id="@chapter.ID" class="btn btn-outline-danger ms-5">Remove</a>
+                                </span>
+                            </button>
+                          
+                        </div>
+                     
                     </h2>
                     <div id="@chapter.ID" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             @if (User.IsInRole("Instructor"))
                             {
-
-
                                 <a asp-action="CreateLesson" asp-route-chId="@chapter.ID"><strong> +Add Lesson</strong></a>
                             }
                             @foreach (var lesson in chapter.Lessons)
                             {
                                 <hr />
-                                <div>
-                                    <span class="text-primary">@lesson.Name</span>
-
+                                <div class="row">
+                                    <div class="col-md-10 text-primary">@lesson.Name</div>
+                                    <div class="col-md-2 text-center">
+                                        <a asp-action="DeleteLesson" asp-route-id="@lesson.Id" class="btn btn-outline-danger">Remove</a>
+                                    </div>
                                 </div>
                             }
 
