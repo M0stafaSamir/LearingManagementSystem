@@ -135,27 +135,24 @@ namespace LMS.Controllers
         }
 
 
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var course = await _context.Courses.FindAsync(id);
+        public async Task<IActionResult> Edit(int id)
+        {
+            var chapters = await _chapterRepository.GetChaptersByCourseId(id);
+            var course = await _courseRepository.GetCourseById(id);
             if (course == null)
             {
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", course.CategoryId);
             ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id", course.InstructorId);
+            ViewBag.chapters = chapters;
             return View(course);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Image,IsAccepted,IsDeleted,CategoryId,InstructorId")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Image,IsAccepted,IsDeleted,CategoryId,InstructorId")] Course course, IFormFile Image)
         {
             if (id != course.Id)
             {
@@ -166,8 +163,7 @@ namespace LMS.Controllers
             {
                 try
                 {
-                    _context.Update(course);
-                    await _context.SaveChangesAsync();
+                    await _courseRepository.UpdateCourse(course, Image);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -182,6 +178,7 @@ namespace LMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", course.CategoryId);
             ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id", course.InstructorId);
             return View(course);

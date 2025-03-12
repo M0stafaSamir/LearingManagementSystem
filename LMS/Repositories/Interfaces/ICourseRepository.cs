@@ -13,7 +13,7 @@ namespace LMS.Repositories.Interfaces
         Task<IEnumerable<Course>> SearchCourseByName(string name);
         Task<Course> GetCourseById(int id);
         Task AddCourse(Course course);
-        Task UpdateCourse(Course course);
+        Task UpdateCourse(Course course, IFormFile Image);
         Task AcceptCourse(int id);
         Task DeleteCourse(int id);
         Task<IEnumerable<Course>> GetCoursesByCategoryId(int categoryId);

@@ -112,11 +112,42 @@ namespace LMS.Repositories
                 .Where(c => c.Name == name).ToListAsync();
         }
 
-        public async Task UpdateCourse(Course course)
+
+        public async Task UpdateCourse(Course course, IFormFile Image)
         {
-            _context.Courses.Update(course);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (Image != null && Image.Length > 0)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(Image.FileName);
+                    var extension = Path.GetExtension(Image.FileName);
+                    var uniqueFileName = fileName + "_" + Guid.NewGuid().ToString() + extension;
+
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/courses", uniqueFileName);
+
+                    if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, "images/courses")))
+                    {
+                        Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, "images/courses"));
+                    }
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Image.CopyToAsync(fileStream);
+                    }
+
+                    course.Image = uniqueFileName;
+                }
+
+                _context.Courses.Update(course);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while uploading the image: {ex.Message}");
+            }
         }
+
+
 
 
         public async Task AcceptCourse(int id)
