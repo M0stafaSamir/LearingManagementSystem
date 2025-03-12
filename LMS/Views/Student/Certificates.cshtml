@@ -9,32 +9,35 @@
 else
 {
     <div class="container">
-        
-    
         <div class="row justify-content-center align-items-center">
-            @foreach(var cert in Model){
-                <div class="certificate-container">
+            @foreach (var cert in Model)
+            {
+                var course = cert.Course; 
+                <hr />
+                <div class="certificate-container my-5">
                     <div class="certificate">
                         <div class="water-mark-overlay"></div>
                         <div class="certificate-header">
-                            <img src="~/assets/img/Book.svg" class="logo" alt="">
+                            <img src="~/assets/img/Book.svg" class="logo" alt="Course certificate logo">
                         </div>
                         <div class="certificate-body">
-
-                            <p class="certificate-title"><strong>DIPLOMA AT @cert.Course.Name</strong></p>
+                            <p class="certificate-title text-capitalize" ><strong>DIPLOMA  AT @course.Name </strong></p>
                             <h1>Certificate of Completion</h1>
                             <p class="student-name">@cert.Student.Name</p>
                             <div class="certificate-content">
                                 <div class="about-certificate">
                                     <p>
-                                        has completed @cert.Course.TotalDuration Minutes on topic title here online on Date @cert.AcquireDate.ToString("MMMM dd, yyyy")
+                                        has got @cert.Grade on @course.Name online on Date @cert.AcquireDate.ToString("MMMM dd, yyyy")
                                     </p>
                                 </div>
+                                @{
+                                    var coursesCount = course.Lessons?.Count() ?? 0;
+                                }
                                 <p class="topic-title">
-                                    The Topic consists of @cert.Course.TotalDuration Continuity Minutes and includes the following:
+                                    The Topic consists of the following:
                                 </p>
                                 <div class="text-center">
-                                    <p class="topic-description text-muted">@cert.Course.Description </p>
+                                    <p class="topic-description text-muted">@course.Description</p>
                                 </div>
                             </div>
                             <div class="certificate-footer text-muted">
@@ -51,7 +54,7 @@ else
                                             </div>
                                             <div class="col-md-6">
                                                 <p>
-                                                    Endorsed by : <span>@cert.Course.Instructor.Name</span>
+                                                    Endorsed by : <span>@course.Instructor.Name</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -63,7 +66,6 @@ else
                 </div>
             }
         </div>
-        
     </div>
 }
 
@@ -74,27 +76,18 @@ else
 
     .certificate-container {
         padding: 50px;
-        width: 1024px;
+        width: 100%;
+        max-width: 1024px;
+        margin: 0 auto;
     }
 
     .certificate {
         border: 20px solid #0C5280;
         padding: 25px;
-        height: 600px;
         position: relative;
+        width: 100%;
+        box-sizing: border-box;
     }
-
-        .certificate:after {
-            content: '';
-            top: 0px;
-            left: 0px;
-            bottom: 0px;
-            right: 0px;
-            position: absolute;
-            /* background-image: url(); */
-            background-size: 100%;
-            z-index: -1;
-        }
 
     .certificate-header > .logo {
         width: 80px;
@@ -121,15 +114,36 @@ else
 
     .certificate-content {
         margin: 0 auto;
-        width: 750px;
+        width: 100%;
     }
 
     .about-certificate {
-        width: 380px;
+        width: 100%;
         margin: 0 auto;
     }
 
     .topic-description {
         text-align: center;
+    }
+
+    media (max-width: 768px) {
+        .certificate-container ; 
+
+    {
+        padding: 20px;
+    }
+
+    .certificate {
+        padding: 15px;
+    }
+
+    .certificate-title h1 {
+        font-size: 36px;
+    }
+
+    .student-name {
+        font-size: 20px;
+    }
+
     }
 </style>

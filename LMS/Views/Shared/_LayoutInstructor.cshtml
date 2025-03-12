@@ -68,13 +68,20 @@
             @if (SignInManager.IsSignedIn(User))
             {
 
-
+                var user = await UserManager.GetUserAsync(User);
+                var profileImage = user?.ProfileImg ?? Url.Content("~/assets/img/Avatar.jpg"); // Default image if none is set
 
                 <div class="dropdown">
-                    <button class="btn dropdown-toggle border border-0 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-user fs-5" style="color: #5fcf80;"></i>
+                    <button class="btn dropdown-toggle border border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="@profileImage" alt="Profile Image" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
                     </button>
+
                     <ul class="dropdown-menu">
+                        <li>
+                            <form class="form-inline dropdown-item " asp-area="Identity" asp-page="/Account/Manage/PersonalData" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                <button type="submit" class="nav-link btn btn-link text-info"><i class="fa-solid fa-info "></i> PersonalData</button>
+                            </form>
+                        </li>
                         <li>
                             <form class="form-inline dropdown-item " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                                 <button type="submit" class="nav-link btn btn-link text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>

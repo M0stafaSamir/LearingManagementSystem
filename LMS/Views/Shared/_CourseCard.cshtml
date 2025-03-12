@@ -2,7 +2,12 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
-
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var profileImage = user?.ProfileImg ?? Url.Content("~/assets/img/Avatar.jpg");
+    bool isPurchased = user?.Purchases?.Any(c => c.CourseId == Model.Id) ?? false;
+        
+}
 <div class="card" style="max-width: 320px" >
 
     <img height="200" src="~/images/courses/@Model.Image" class="card-img-top object-fit-cover" alt="Product Image">
@@ -24,28 +29,28 @@
             </div>
         </div>
         <div class="mt-1">
-            <img src="~/assets/img/Avatar.jpg" class="rounded-circle shadow-4"
+  
+            <img src="@profileImage" class="rounded-circle shadow-4"
             style="width: 30px;" alt="Avatar" />
             <span class="ms-1">@Model.Instructor.Name</span>
         </div>
     </div>
      @if (SignInManager.IsSignedIn(User)) 
      {
-        @if (User.IsInRole("Instructor"))
+        @if (User.IsInRole("Instructor") && Model.InstructorId == user.Id)
         {
             <div class="card-footer d-flex justify-content-between bg-light">
                 <a asp-action="Edit" asp-route-id="@Model.Id"><i class="fa-solid fa-pen-to-square"></i> Edit</a>|
                 <a asp-action="Details" asp-route-id="@Model.Id"><i class="fa-solid fa-gears"></i> Details</a>|
                 <a asp-action="Delete" asp-route-id="@Model.Id"><i class="fa-solid fa-trash-can"></i> Delete</a>
             </div>
-
         }
         else
         {
         
             <div class="card-footer d-flex justify-content-between bg-light">
 
-            @if (@Model.Price == 0)
+                @if (@Model.Price == 0 || isPurchased)
             {
                 <form method="post" asp-action="EnrollCourse" asp-controller="Student">
                     <input type="hidden" name="courseId" value="@Model.Id" />
