@@ -19,7 +19,14 @@
                                         <p>@lesson.Chapter.Name : @lesson.Name</p>
                                     </div>
                                     <div>
-                                        <a asp-action="LessonDetails" asp-controller="Student" asp-route-lessonId="@lesson.Id" class="lessonLink">study the lesson</a>
+                                        @if (Model.IsEnrolled)
+                                        {
+                                           <a asp-action="LessonDetails" asp-controller="Student" asp-route-lessonId="@lesson.Id" class="lessonLink">study the lesson</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" onclick="alert('You must enroll in the course to access lessons.'); return false;">study the lesson</a>
+                                        }
                                     </div>
                                 </li>
                             }
