@@ -36,7 +36,10 @@ namespace LMS.Controllers
             ViewBag.CoursesCount =  _courseRepo.GetCourseCount();
             return View(await _categoryRepo.GetAllCategories());
         }
-
+        public IActionResult About()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

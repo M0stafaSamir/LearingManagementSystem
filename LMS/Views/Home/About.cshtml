@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewData["Title"] = "About";
+}
+<style>
+    /* ----------------------------------------- Header Section ----------------------------------------- */
+    .header {
+        position: relative;
+        background-color: white; 
+        color: #2E8B57;
+        text-align: center;
+        padding: 0px 0;
+    }
+
+    .headerLineText {
+        font-size: 3rem;
+        line-height: 3rem;
+        margin: 0;
+        font-weight: 900;
+        color: #fff;
+        text-align: center;
+    }
+
+        .header img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+    .headlineLayer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        color: #2E8B57;
+    }
+
+    /* ----------------------------------------- General Section Styles ----------------------------------------- */
+    .container {
+        /* margin-top: 40px; */
+    }
+
+    .SectionTextContainer, .SecondSectionText {
+        margin-bottom: 30px;
+    }
+
+    .sectionHeaderLine {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #2E8B57; 
+        margin-bottom: 15px;
+    }
+
+    .sectionText {
+        font-size: 1rem;
+        color: #555; 
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    ul.sectionText {
+        text-align: left;
+        font-size: 1rem;
+        color: #555;
+    }
+
+    /* ----------------------------------------- Button Styling ----------------------------------------- */
+    .colordSection {
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    button {
+        padding: 12px 20px;
+        font-size: 1.1rem;
+        background-color: #2E8B57; 
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #228B22;
+        }
+
+    /* ----------------------------------------- Background Colors for Sections ----------------------------------------- */
+    .SectionTextContainer, .SecondSectionText {
+        background-color: #F4F4F4; 
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .SectionTextContainer h2, .SecondSectionText h2 {
+            color: #2E8B57; 
+        }
+
+    /* ----------------------------------------- Media Queries for Responsiveness ----------------------------------------- */
+    media (max-width: 768px) {
+        .header
+
+    {
+        padding: 30px 0;
+    }
+
+    .headlineLayer {
+        font-size: 1.5rem;
+    }
+
+    .sectionHeaderLine {
+        font-size: 1.5rem;
+    }
+
+    .sectionText {
+        font-size: 0.9rem;
+    }
+
+    }
+</style>
+<!-- ----------------------------------- FIRST SECTION - Header ----------------------------------- -->
+<div class="header bg-dark text-center">
+    <img src="~/assets/img/banner.jpg" class="img-fluid" alt="Learning Management System">
+    <div class="headlineLayer d-flex justify-content-center align-items-center">
+        <h1 class="headerLineText">Welcome to Our Learning Management System</h1>
+    </div>
+</div>
+
+<!-- ----------------------------------- SECOND SECTION - About Us ----------------------------------- -->
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+
+        <!-- Section 1: Overview -->
+        <div class="col-md-8">
+            <div class="SectionTextContainer text-center">
+                <h2 class="sectionHeaderLine">About Our LMS</h2>
+                <p class="sectionText">Our Learning Management System (LMS) provides a comprehensive platform for managing and delivering educational content. With powerful tools for tracking progress, assessments, and communication, we ensure that learners have access to a seamless and engaging experience, whether they are in the classroom or learning remotely.</p>
+            </div>
+        </div>
+
+        <!-- Section 2: Key Features -->
+        <div class="col-md-8 mt-5">
+            <div class="SectionTextContainer text-center">
+                <h2 class="sectionHeaderLine">Key Features of Our LMS</h2>
+                <p class="sectionText">Our LMS is designed with both instructors and students in mind. Some of its key features include:</p>
+                <ul class="sectionText">
+                    <li>Interactive Courses and Modules</li>
+                    <li>Real-time Progress Tracking</li>
+                    <li>Instant Feedback and Assessments</li>
+                    <li>Collaborative Tools for Students and Teachers</li>
+                    <li>Mobile-Optimized for Learning On-the-Go</li>
+                    <li>Customizable Learning Paths</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 3: Our Mission -->
+        <div class="col-md-8">
+            <div class="SectionTextContainer text-center">
+                <h2 class="sectionHeaderLine">Our Mission</h2>
+                <p class="sectionText">We aim to provide accessible and quality education for everyone. Our mission is to create a collaborative environment where learners can grow, teachers can nurture, and administrators can effectively manage the entire learning experience. Our platform empowers learners to reach their full potential at their own pace.</p>
+            </div>
+        </div>
+
+        <!-- Section 4: Call to Action -->
+        <div class="col-md-12 mb-5">
+            <div class="colordSection d-flex justify-content-center align-items-center">
+                <h4 mx-3>Ready to Get Started?</h4>
+                <a asp-action="index" asp-controller="Home" class="btn btn-primary border-radius" id="btn-planning">Join Now and Start Learning</a>
+            </div>
+        </div>
+
+        <!-- Section 5: Contact Us -->
+        <div class="col-md-8">
+            <div class="SecondSectionText text-center">
+                <h2 class="sectionHeaderLine">Contact Us</h2>
+                <p class="sectionText">If you have any questions or need support, don't hesitate to reach out to our team. We are here to help you with any inquiries or assistance you may need to make the most of your learning experience on our platform.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
