@@ -57,7 +57,7 @@ public class StudentController : Controller
         Console.WriteLine(amount_cents);
         Console.WriteLine(success);
         _studentRepo.PurchaseCourse( studentId,  Cid);
-        //var courses = _studentRepo.GetAllCourses(search, category);
+        //var courses = _studentRepo.GetAllCourses(search, category);   
 
 
         return RedirectToAction("Index");
@@ -132,9 +132,11 @@ public class StudentController : Controller
             },
             extras = new
             {
-                id = studentId
+                id = studentId,
+                courseID=courseId
             },
-            redirection_url = $"https://localhost:7181/Student/PaymentSuccess?Cid={courseId}"
+            redirection_url = $"https://localhost:7181/Student/PaymentSuccess?Cid={courseId}",
+            notification_url= "https://webhook.site/ba83174a-08b2-4cd9-b3d0-a16c952e0b70"
 
             // Add "special_reference", "notification_url", and "redirection_url" if needed
         };
